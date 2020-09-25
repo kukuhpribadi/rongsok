@@ -126,36 +126,6 @@ $(document).ready(function(){
     e.preventDefault();
     addRow();    
   });
-
-
-  // input form per row
-  // $('table').on('change keyup', function(e){
-  //     let total = 0;
-  //   if (e.target.classList.contains('formTransaksiSelect') || e.target.id == 'qty') {
-  //     $('.rowTransaksi').map((idx, v) => {
-  //         $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
-  //         let harga = $(v).find(':selected').attr('data-harga');
-  //         if(harga == undefined){
-  //             harga = null;
-  //         };
-  //         let formHarga = $(v).find('#harga').autoNumeric('set', harga);
-  //         let qty = $(v).find('#qty').val();
-  //         if (harga == undefined) {
-  //             $(v).find('#qty').val('');
-  //         }
-  //         let hargaBaru = $(v).find('#harga').val().split('.').join('');
-  //         let jumlah = $(v).find('#jumlah').autoNumeric('set', hargaBaru * qty);
-  //         jumlah = jumlah.val().split('.').join('');
-  //         jumlah = parseInt(jumlah);
-  //         if (harga == undefined) {
-  //             $(v).find('#jumlah').val('');
-  //         }
-  //         total += jumlah;
-  //     });
-  //     $('#total').autoNumeric('init', {mDec: '0'});
-  //     $('#total').autoNumeric('set', total);
-  //   }
-  // });
   
   // input form per row
   $('table').on('change keyup', function(e){
@@ -180,33 +150,7 @@ $(document).ready(function(){
           $(e.target).closest('tr').remove();
         }
 
-        let total = 0;
-        $('.rowTransaksi').map((idx, v) => {
-            $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
-            let harga = $(v).find(':selected').attr('data-harga');
-            if(harga == undefined){
-                harga = null;
-            };
-            let formHarga = $(v).find('#harga').autoNumeric('set', harga);
-            let qty = $(v).find('#qty').val();
-            // if (qty <= 0) {
-            //     qty = 1;
-            //     $(v).find('#qty').val(1);
-            // } 
-            if (harga == undefined) {
-                $(v).find('#qty').val('');
-            }
-            let jumlah = $(v).find('#jumlah').autoNumeric('set', harga * qty);
-            jumlah = jumlah.val().split('.').join('');
-            jumlah = parseInt(jumlah);
-            if (harga == undefined) {
-                $(v).find('#jumlah').val('');
-            }
-            total += jumlah;
-            
-        });
-        $('#total').autoNumeric('init', {mDec: '0'});
-        $('#total').autoNumeric('set', total);
+        loopRow();
       }
   });
 
