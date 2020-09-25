@@ -76,12 +76,7 @@
 @section('script')
 <script>
 $(document).ready(function(){
-  //select2
-  $('.formTransaksiSelect').select2({
-        placeholder: 'Pilih jenis barang',
-        allowClear: true,
-    });
-
+  // function add row
   const addRow = function() {
     let row = $('#rowTr');
     row.find(".formTransaksiSelect").each(function(index)
@@ -103,6 +98,28 @@ $(document).ready(function(){
     let removeFail = $('.formTransaksiSelect').last().next().next().remove();
   }
 
+  // function loop row
+  const loopRow = function(){
+    let total = 0;
+    $('.rowTransaksi').map((idx, v) => {
+          $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
+          let harga = $(v).find('#harga').val().split('.').join('');
+          let qty = $(v).find('#qty').val();
+          let jumlah = $(v).find('#jumlah').autoNumeric('set', harga * qty);
+          jumlah = jumlah.val().split('.').join('');
+          jumlah = parseInt(jumlah);
+          total += jumlah;
+      });
+      $('#total').autoNumeric('init', {mDec: '0'});
+      $('#total').autoNumeric('set', total);
+  }
+
+  //select2
+  $('.formTransaksiSelect').select2({
+        placeholder: 'Pilih jenis barang',
+        allowClear: true,
+    });
+
   // add row
   let idForSelect = 0;
   $('#btnAddRow').click(function(e){
@@ -112,31 +129,44 @@ $(document).ready(function(){
 
 
   // input form per row
+  // $('table').on('change keyup', function(e){
+  //     let total = 0;
+  //   if (e.target.classList.contains('formTransaksiSelect') || e.target.id == 'qty') {
+  //     $('.rowTransaksi').map((idx, v) => {
+  //         $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
+  //         let harga = $(v).find(':selected').attr('data-harga');
+  //         if(harga == undefined){
+  //             harga = null;
+  //         };
+  //         let formHarga = $(v).find('#harga').autoNumeric('set', harga);
+  //         let qty = $(v).find('#qty').val();
+  //         if (harga == undefined) {
+  //             $(v).find('#qty').val('');
+  //         }
+  //         let hargaBaru = $(v).find('#harga').val().split('.').join('');
+  //         let jumlah = $(v).find('#jumlah').autoNumeric('set', hargaBaru * qty);
+  //         jumlah = jumlah.val().split('.').join('');
+  //         jumlah = parseInt(jumlah);
+  //         if (harga == undefined) {
+  //             $(v).find('#jumlah').val('');
+  //         }
+  //         total += jumlah;
+  //     });
+  //     $('#total').autoNumeric('init', {mDec: '0'});
+  //     $('#total').autoNumeric('set', total);
+  //   }
+  // });
+  
+  // input form per row
   $('table').on('change keyup', function(e){
-      let total = 0;
-    if (e.target.classList.contains('formTransaksiSelect') || e.target.id == 'qty') {
-      $('.rowTransaksi').map((idx, v) => {
-          $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
-          let harga = $(v).find(':selected').attr('data-harga');
-          if(harga == undefined){
-              harga = null;
-          };
-          let formHarga = $(v).find('#harga').autoNumeric('set', harga);
-          let qty = $(v).find('#qty').val();
-          if (harga == undefined) {
-              $(v).find('#qty').val('');
-          }
-          let hargaBaru = $(v).find('#harga').val().split('.').join('');
-          let jumlah = $(v).find('#jumlah').autoNumeric('set', hargaBaru * qty);
-          jumlah = jumlah.val().split('.').join('');
-          jumlah = parseInt(jumlah);
-          if (harga == undefined) {
-              $(v).find('#jumlah').val('');
-          }
-          total += jumlah;
-      });
-      $('#total').autoNumeric('init', {mDec: '0'});
-      $('#total').autoNumeric('set', total);
+    
+    if (e.target.classList.contains('formTransaksiSelect') ) {
+        $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
+        let harga = $(e.target).find(':selected').attr('data-harga');
+        $(e.target).closest('tr').find('#harga').autoNumeric('set', harga);
+        loopRow();
+    } else if (e.target.id == 'qty' || e.target.id == 'harga') {
+      loopRow();
     }
   });
 
