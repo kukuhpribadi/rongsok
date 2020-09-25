@@ -24,6 +24,10 @@
   {{-- sweetalert --}}
   <link rel="stylesheet" href="{{asset('vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.css')}}">
 
+  {{-- Select2 --}}
+  <link rel="stylesheet" href="{{asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('vendor/select2/css/select2.css')}}">
+
 </head>
 
 <body id="page-top">
@@ -115,6 +119,9 @@
 
   {{-- sweetalert --}}
   <script src="{{asset('vendor/sweetalert2/sweetalert2.js')}}"></script>
+
+  <!-- select2 -->
+  <script src="{{asset('vendor/select2/js/select2.js')}}"></script>
 
   @if(Session::has('sukses'))
     <script>
