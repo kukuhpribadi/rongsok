@@ -15,6 +15,8 @@
         <div class="card-body">
           <div class="row">
             <div class="col">
+              <form action="{{route('transaksiBeliStore')}}" method="post">
+                @csrf
               <table class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -40,7 +42,7 @@
                       <input type="text" class="form-control" name="harga[]" id="harga" data-a-dec="," data-a-sep=".">
                     </td>
                     <td>
-                      <input type="number" class="form-control" name="qty[]" id="qty">
+                      <input type="text" class="form-control" name="qty[]" id="qty">
                     </td>
                     <td>
                       <input type="text" class="form-control" name="keterangan[]" id="keterangan">
@@ -53,17 +55,28 @@
                     </td>
                   </tr>
                   <tr class="rowAddBtn">
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td><button class="btn btn-sm btn-primary btn-block" id="btnAddRow">Add row</button></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>Total</td>
                     <td>
                       <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep=".">
                     </td>
                   </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
+            </form>
             </div>
           </div>
         </div>
@@ -134,6 +147,7 @@ $(document).ready(function(){
         $('#harga, #jumlah').autoNumeric('init', {mDec: '0'});
         let harga = $(e.target).find(':selected').attr('data-harga');
         $(e.target).closest('tr').find('#harga').autoNumeric('set', harga);
+        $(e.target).closest('tr').find('#qty').val(1);
         loopRow();
     } else if (e.target.id == 'qty' || e.target.id == 'harga') {
       loopRow();
@@ -153,8 +167,6 @@ $(document).ready(function(){
         loopRow();
       }
   });
-
-  
 
 });
 </script>

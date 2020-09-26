@@ -14,6 +14,7 @@
 Route::get('/', 'DashboardController@index')->name('dashboardIndex');
 
 Route::get('/transaksi/beli', 'TransaksiController@beli')->name('transaksiBeli');
+Route::post('/transaksi/beli', 'TransaksiController@beliStore')->name('transaksiBeliStore');
 
 Route::get('/barang', 'BarangController@index')->name('barangIndex');
 Route::get('/barang/data', 'BarangController@dataBarang')->name('dataBarang');
