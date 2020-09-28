@@ -4,12 +4,12 @@
 
 <div class="row">
 
-    <!-- Area Chart -->
     <div class="col">
       <div class="card shadow mb-4">
         {{-- header --}}
-        <div class="card-header py-3">
+        <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Beli barang</h6>
+          <h5 class="m-0 mr-3 font-weight-bold text-dark">{{$transaksiId}}</h5>
         </div>
         {{-- body --}}
         <div class="card-body">
@@ -29,6 +29,7 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <input type="hidden" name="transaksi_beli_id" value="{{$transaksiId}}">
                   <tr class="rowTransaksi" id="rowTr">
                     <td>
                       <select class="form-control select2 formTransaksiSelect" id="idSelect" name="nama[]" >

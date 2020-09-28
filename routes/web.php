@@ -13,8 +13,13 @@
 
 Route::get('/', 'DashboardController@index')->name('dashboardIndex');
 
-Route::get('/transaksi/beli', 'TransaksiController@beli')->name('transaksiBeli');
-Route::post('/transaksi/beli', 'TransaksiController@beliStore')->name('transaksiBeliStore');
+Route::get('/transaksi/beli', 'TransaksiBeliController@beli')->name('transaksiBeli');
+Route::post('/transaksi/beli', 'TransaksiBeliController@beliStore')->name('transaksiBeliStore');
+Route::get('/transaksi/beli/index', 'TransaksiBeliController@indexTransaksiBeli')->name('indexTransaksiBeli');
+Route::get('/transaksi/beli/data', 'TransaksiBeliController@dataTransaksiBeli')->name('dataTransaksiBeli');
+Route::get('/transaksi/beli/delete/{id}', 'TransaksiBeliController@delete')->name('transaksiBeliDelete');
+
+Route::get('/transaksi/jual', 'TransaksiJualController@jual')->name('transaksiJual');
 
 Route::get('/barang', 'BarangController@index')->name('barangIndex');
 Route::get('/barang/data', 'BarangController@dataBarang')->name('dataBarang');

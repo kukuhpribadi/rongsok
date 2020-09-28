@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Barang;
+use App\TransaksiBeli;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+
+class TransaksiBeliController extends Controller
+{
+    public function getTransaksiBeliId()
+    {
+        $idBeli = TransaksiBeli::latest('id')->first();
+
+        if ($idBeli === null) {
+            $idBeli = 'BL' . sprintf("%05s", 1);
+        } else {
+            $idBeli = $idBeli->transaksi_beli_id;
+            $idBeli = explode('BL', $idBeli);
+            $idBeli = 'BL' . sprintf("%05s", $idBeli[1] + 1);
+        }
+
+        return $idBeli;
+    }
+
+    public function beli()
+    {
+        $transaksiId = $this->getTransaksiBeliId();
+        $barang = Barang::orderBy('nama', 'asc')->get();
+        return view('transaksi.beli', compact('barang', 'transaksiId'));
+    }
+
+    public function beliStore(Request $request)
+    {
+        $filter = array_filter($request->nama);
+        $harga = str_replace('.', '', $request->harga);
+
+        foreach ($filter as $key => $value) {
+            TransaksiBeli::create([
+                'barang_id' => $request->nama[$key],
+                'transaksi_beli_id' => $request->transaksi_beli_id,
+                'harga' => $harga[$key],
+                'qty' => $request->qty[$key],
+                'keterangan' => $request->keterangan[$key],
+            ]);
+        }
+
+        return redirect(route('transaksiBeli'))->with('sukses', 'Transaksi berhasil!');
+    }
+
+    public function indexTransaksiBeli()
+    {
+        return view('transaksi.indexBeli');
+    }
+
+    public function dataTransaksiBeli()
+    {
+        $pembelian = TransaksiBeli::query()->orderBy('created_at', 'desc');
+        return DataTables::eloquent($pembelian)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($b) {
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
+                <a href="' . route("transaksiBeliDelete", $b->id) . '" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-idTransaksi="' . $b->transaksi_beli_id . '" data-nama="' . $b->barang->nama . '"><i class="far fa-trash-alt"></i></a>';
+            })
+            ->addColumn('total', function ($t) {
+                return "Rp " . number_format($t->harga * $t->qty, 0, ',', '.');
+            })
+            ->editColumn('jenis_barang', function ($jb) {
+                return $jb->barang->nama;
+            })
+            ->editColumn('harga', function ($h) {
+                return "Rp " . number_format($h->harga, 0, ',', '.');
+            })
+            ->editColumn('tanggal', function ($tgl) {
+                return $tgl->created_at->format('d-m-Y');;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function delete($id)
+    {
+        TransaksiBeli::find($id)->delete();
+    }
+}

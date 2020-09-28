@@ -24,7 +24,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-      Transaksi
+      Transaksi Pembelian
     </div>
 
     <li class="nav-item {{ request()->routeIs('transaksiBeli') ? 'active' : ''}}">
@@ -33,16 +33,30 @@
           <span>Beli barang</span></a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-cash-register"></i>
-          <span>Jual barang</span></a>
-    </li>
-
     <li class="nav-item {{ request()->routeIs('barangIndex') ? 'active' : ''}}">
         <a class="nav-link" href="{{route('barangIndex')}}">
             <i class="fas fa-box-open"></i>
           <span>Set harga barang</span></a>
+    </li>
+
+    <li class="nav-item {{ request()->routeIs('indexTransaksiBeli') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('indexTransaksiBeli')}}">
+        <i class="fas fa-ellipsis-h"></i>
+        <span>Data Pembelian</span></a>
+    </li>
+    
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Transaksi Penjualan
+    </div>
+
+    <li class="nav-item {{ request()->routeIs('transaksiJual') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('transaksiJual')}}">
+          <i class="fas fa-cash-register"></i>
+        <span>Jual barang</span></a>
     </li>
 
     <!-- Divider -->

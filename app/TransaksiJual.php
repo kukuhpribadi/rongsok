@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TransaksiBeli extends Model
+class TransaksiJual extends Model
 {
-    protected $table = 'transaksi_beli';
+    protected $table = 'transaksi_jual';
     protected $guarded = [];
 
     public function barang()
