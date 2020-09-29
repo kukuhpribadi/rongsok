@@ -1,90 +1,88 @@
 @extends('layout.master')
 @section('title', 'Beli')
 @section('content')
-
 <div class="row">
-
-    <div class="col">
-      <div class="card shadow mb-4">
-        {{-- header --}}
-        <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Beli barang</h6>
-          <h5 class="m-0 mr-3 font-weight-bold text-dark">{{$transaksiId}}</h5>
-        </div>
-        {{-- body --}}
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <form action="{{route('transaksiBeliStore')}}" method="post">
-                @csrf
-              <table class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th style="width: 20%">Jenis barang</th>
-                    <th>Harga</th>
-                    <th>Qty</th>
-                    <th style="width: 30%">Keterangan</th>
-                    <th>Aksi</th>
-                    <th>Jumlah</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <input type="hidden" name="transaksi_beli_id" value="{{$transaksiId}}">
-                  <tr class="rowTransaksi" id="rowTr">
-                    <td>
-                      <select class="form-control select2 formTransaksiSelect" id="idSelect" name="nama[]" >
-                        <option value=""></option>
-                        @foreach ($barang as $item)
-                        <option data-id="{{$item->id}}" data-harga="{{$item->harga}}" data-nama="{{$item->nama}}" value="{{$item->id}}">{{$item->nama}}</option>
-                        @endforeach 
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="harga[]" id="harga" data-a-dec="," data-a-sep=".">
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="qty[]" id="qty">
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="keterangan[]" id="keterangan">
-                    </td>
-                    <td>
-                      <button class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt" id="iconSampah"></i></button>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="jumlah[]" id="jumlah" data-a-dec="," data-a-sep=".">
-                    </td>
-                  </tr>
-                  <tr class="rowAddBtn">
-                    <td><button class="btn btn-sm btn-primary btn-block" id="btnAddRow">Add row</button></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td>
-                      <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep=".">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </form>
-            </div>
+  <div class="col">
+    <div class="card shadow mb-4">
+      {{-- header --}}
+      <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Beli barang</h6>
+        <h5 class="m-0 mr-3 font-weight-bold text-dark">{{$transaksiId}}</h5>
+      </div>
+      {{-- body --}}
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <form action="{{route('transaksiBeliStore')}}" method="post">
+              @csrf
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Jenis barang</th>
+                  <th>Harga</th>
+                  <th>Qty</th>
+                  <th style="width: 30%">Keterangan</th>
+                  <th>Aksi</th>
+                  <th>Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <input type="hidden" name="transaksi_beli_id" value="{{$transaksiId}}">
+                <tr class="rowTransaksi" id="rowTr">
+                  <td>
+                    <select class="form-control select2 formTransaksiSelect" id="idSelect" name="nama[]" >
+                      <option value=""></option>
+                      @foreach ($barang as $item)
+                      <option data-id="{{$item->id}}" data-harga="{{$item->harga}}" data-nama="{{$item->nama}}" value="{{$item->id}}">{{$item->nama}}</option>
+                      @endforeach 
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="harga[]" id="harga" data-a-dec="," data-a-sep=".">
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="qty[]" id="qty" autocomplete="off">
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="keterangan[]" id="keterangan" autocomplete="off">
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt" id="iconSampah"></i></button>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="jumlah[]" id="jumlah" data-a-dec="," data-a-sep=".">
+                  </td>
+                </tr>
+                <tr class="rowAddBtn">
+                  <td><button class="btn btn-sm btn-primary btn-block" id="btnAddRow">Add row</button></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>Total</td>
+                  <td>
+                    <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep=".">
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
           </div>
         </div>
       </div>
     </div>
-  
   </div>
+</div>
+
 @endsection
 
 @section('script')

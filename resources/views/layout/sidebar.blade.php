@@ -59,6 +59,12 @@
         <span>Jual barang</span></a>
     </li>
 
+    <li class="nav-item {{ request()->routeIs('indexTransaksiJual') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('indexTransaksiJual')}}">
+        <i class="fas fa-ellipsis-h"></i>
+        <span>Data Penjualan</span></a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Daftar Beli')
+@section('title', 'Daftar Penjualan')
 @section('content')
 
 <div class="row">
@@ -9,7 +9,7 @@
       <div class="card shadow mb-4">
         {{-- header --}}
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Daftar Beli</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Daftar Penjualan</h6>
         </div>
         {{-- body --}}
         <div class="card-body">
@@ -60,7 +60,7 @@
             <input type="hidden" name="id" id="idEdit">
             <div class="form-group">
               <label>ID Transaksi</label>
-              <input type="text" class="form-control" name="transaksi_beli_id" id="transaksiIdEdit" autocomplete="off" readonly>
+              <input type="text" class="form-control" name="transaksi_jual_id" id="transaksiIdEdit" autocomplete="off" readonly>
             </div>
             <div class="form-group">
               <label>Jenis barang</label>
@@ -107,13 +107,13 @@ $(document).ready(function(){
   $('#dataTable').DataTable({
     responsive: true,
     serverSide: false,
-    ajax: '{{route('dataTransaksiBeli')}}',
+    ajax: '{{route('dataTransaksiJual')}}',
     columns: [{
             data: 'DT_RowIndex', 
             name: 'id'
         }, {
-            data: 'transaksi_beli_id', 
-            name: 'transaksi_beli_id'
+            data: 'transaksi_jual_id', 
+            name: 'transaksi_jual_id'
         }, {
             data: 'jenis_barang', 
             name: 'jenis_barang'
@@ -147,7 +147,7 @@ $(document).ready(function(){
   $('#modalEdit').on('show.bs.modal', function(event) {
       let button = $(event.relatedTarget);
       let id = button.data('id');
-      let transaksiId = button.data('transaksi_beli_id');
+      let transaksiId = button.data('transaksi_jual_id');
       let barang_id = button.data('barang_id');
       let harga = button.data('harga');
       let qty = button.data('qty');
@@ -177,7 +177,7 @@ $(document).ready(function(){
     let data = form.serialize();
     
     $.ajax({
-        url: "{{route('transaksiBeliUpdate')}}",
+        url: "{{route('transaksiJualUpdate')}}",
         method: 'post',
         data: data,
         success: function(res) {

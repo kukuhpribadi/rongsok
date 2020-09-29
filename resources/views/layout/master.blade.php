@@ -25,8 +25,8 @@
   <link rel="stylesheet" href="{{asset('vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.css')}}">
 
   {{-- Select2 --}}
-  <link rel="stylesheet" href="{{asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.css')}}">
   <link rel="stylesheet" href="{{asset('vendor/select2/css/select2.css')}}">
+  <link rel="stylesheet" href="{{asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.css')}}">
 
 </head>
 

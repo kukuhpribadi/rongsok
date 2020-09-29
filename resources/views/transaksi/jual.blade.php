@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="row">
-
     <div class="col">
       <div class="card shadow mb-4">
         {{-- header --}}
@@ -15,7 +14,7 @@
         <div class="card-body">
             <div class="row">
               <div class="col">
-                <form action="#" method="post">
+                <form action="{{route('transaksiJualStore')}}" method="post">
                   @csrf
                 <table class="table table-bordered table-striped">
                   <thead>
@@ -43,10 +42,10 @@
                         <input type="text" class="form-control" name="harga[]" id="harga" data-a-dec="," data-a-sep=".">
                       </td>
                       <td>
-                        <input type="text" class="form-control" name="qty[]" id="qty">
+                        <input type="text" class="form-control" name="qty[]" id="qty" autocomplete="off">
                       </td>
                       <td>
-                        <input type="text" class="form-control" name="keterangan[]" id="keterangan">
+                        <input type="text" class="form-control" name="keterangan[]" id="keterangan" autocomplete="off">
                       </td>
                       <td>
                         <button class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt" id="iconSampah"></i></button>

@@ -51,7 +51,8 @@ class TransaksiBeliController extends Controller
 
     public function indexTransaksiBeli()
     {
-        return view('transaksi.indexBeli');
+        $barang = Barang::orderBy('nama', 'asc')->get();
+        return view('transaksi.indexBeli', compact('barang'));
     }
 
     public function dataTransaksiBeli()
@@ -60,7 +61,7 @@ class TransaksiBeliController extends Controller
         return DataTables::eloquent($pembelian)
             ->addIndexColumn()
             ->addColumn('aksi', function ($b) {
-                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-id="' . $b->id . '" data-transaksi_beli_id="' . $b->transaksi_beli_id . '" data-barang_id="' . $b->barang_id . '" data-harga="' . number_format($b->harga, 0, ',', '.') . '" data-qty="' . $b->qty . '" data-keterangan="' . $b->keterangan . '" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
                 <a href="' . route("transaksiBeliDelete", $b->id) . '" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-idTransaksi="' . $b->transaksi_beli_id . '" data-nama="' . $b->barang->nama . '"><i class="far fa-trash-alt"></i></a>';
             })
             ->addColumn('total', function ($t) {
@@ -77,6 +78,19 @@ class TransaksiBeliController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
+    }
+
+    public function update(Request $request)
+    {
+        $transaksi = TransaksiBeli::find($request->id);
+        $harga = str_replace('.', '', $request->harga);
+        $transaksi->update([
+            'transaksi_beli_id' => $request->transaksi_beli_id,
+            'barang_id' => $request->nama,
+            'harga' => $harga,
+            'qty' => $request->qty,
+            'keterangan' => $request->keterangan,
+        ]);
     }
 
     public function delete($id)
