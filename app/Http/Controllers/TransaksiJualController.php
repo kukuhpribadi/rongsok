@@ -74,7 +74,7 @@ class TransaksiJualController extends Controller
                 return "Rp " . number_format($h->harga, 0, ',', '.');
             })
             ->editColumn('tanggal', function ($tgl) {
-                return $tgl->created_at->format('d-m-Y');;
+                return $tgl->created_at->format('d-m-Y');
             })
             ->rawColumns(['aksi'])
             ->make(true);

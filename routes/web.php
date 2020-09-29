@@ -32,3 +32,9 @@ Route::get('/barang/data', 'BarangController@dataBarang')->name('dataBarang');
 Route::post('/barang', 'BarangController@store')->name('barangStore');
 Route::post('/barang/update', 'BarangController@update')->name('barangUpdate');
 Route::get('/barang/delete/{id}', 'BarangController@delete')->name('barangDelete');
+
+Route::get('/karyawan', 'KaryawanController@index')->name('karyawanIndex');
+Route::get('/karyawan/data', 'KaryawanController@dataKaryawan')->name('dataKaryawan');
+Route::post('/karyawan', 'KaryawanController@store')->name('karyawanStore');
+Route::post('/karyawan/update', 'KaryawanController@update')->name('karyawanUpdate');
+Route::get('/karyawan/delete/{id}', 'KaryawanController@delete')->name('karyawanDelete');

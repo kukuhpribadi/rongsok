@@ -66,7 +66,18 @@
     </li>
 
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Karyawan
+    </div>
+
+    <li class="nav-item {{ request()->routeIs('karyawanIndex') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('karyawanIndex')}}">
+        <i class="fas fa-users"></i>
+        <span>Data Karyawan</span></a>
+    </li>
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
