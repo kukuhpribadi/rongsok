@@ -10,8 +10,19 @@
             </div>
             {{-- body --}}
             <div class="card-body">
-                <form action="#" method="post">
+                <form action="{{route('karyawanAbsensiStore')}}" method="post">
                 @csrf
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <label for="datetimepicker4">Pilih Tanggal</label>
+                            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                <input type="text" name="tanggal_absen" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
+                                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-striped" id="dataTable">
                         <tr>
                             <th>No</th>
@@ -24,7 +35,7 @@
                         @foreach ($karyawan as $kr)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$kr->id_karyawan}}</td>
+                            <td><input type="hidden" name="idKaryawan[]" value="{{$kr->id}}">{{$kr->id_karyawan}}</td>
                             <td>{{$kr->nama}}</td>
                             <td>{{$kr->roleKaryawan()}}</td>
                             <td>
@@ -47,4 +58,16 @@
     </div>
 </div>
 
+@endsection
+
+@section('script')
+<script>
+$(document).ready(function(){
+    $('#datetimepicker4').datetimepicker({
+        format: 'L',
+        locale: 'id',
+        defaultDate: new Date(),
+    });
+});
+</script>    
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Absensi;
 use App\Karyawan;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -100,7 +101,31 @@ class KaryawanController extends Controller
 
     public function absensi()
     {
-        $karyawan = Karyawan::all();
+        $karyawan = Karyawan::where('status', '=', 1)->get();
         return view('karyawan.absensi', compact('karyawan'));
+    }
+
+    public function absensiStore(Request $request)
+    {
+        $tanggalAbsen = explode('/', $request->tanggal_absen);
+        $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
+
+        $upah = Karyawan::all();
+
+        $karyawan = $request->idKaryawan;
+        $absensi = $request->absensi;
+        $keterangan = $request->keterangan;
+
+        foreach ($karyawan as $key => $kr) {
+            Absensi::create([
+                'tanggal_absen' => $tanggalAbsen,
+                'karyawan_id' => $kr,
+                'absensi' => $absensi[$key],
+                'keterangan' => $keterangan[$key],
+                'upah' => $absensi[$key] == 1 ? $upah[$key]->upah : 0
+            ]);
+        }
+
+        return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
     }
 }

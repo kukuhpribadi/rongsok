@@ -28,6 +28,9 @@
   <link rel="stylesheet" href="{{asset('vendor/select2/css/select2.css')}}">
   <link rel="stylesheet" href="{{asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.css')}}">
 
+  {{-- datepicker --}}
+  <link rel="stylesheet" href="{{asset('vendor/tempusdominus/tempusdominus-bootstrap-4.min.css')}}">
+
 </head>
 
 <body id="page-top">
@@ -122,6 +125,10 @@
 
   <!-- select2 -->
   <script src="{{asset('vendor/select2/js/select2.js')}}"></script>
+  
+  {{-- datepicker --}}
+  <script src="{{asset('vendor/moment/moment-with-locales.js')}}"></script>
+  <script src="{{asset('vendor/tempusdominus/tempusdominus-bootstrap-4.min.js')}}"></script>
 
   @if(Session::has('sukses'))
     <script>
