@@ -38,3 +38,4 @@ Route::get('/karyawan/data', 'KaryawanController@dataKaryawan')->name('dataKarya
 Route::post('/karyawan', 'KaryawanController@store')->name('karyawanStore');
 Route::post('/karyawan/update', 'KaryawanController@update')->name('karyawanUpdate');
 Route::get('/karyawan/delete/{id}', 'KaryawanController@delete')->name('karyawanDelete');
+Route::get('/karyawan/absensi', 'KaryawanController@absensi')->name('karyawanAbsensi');

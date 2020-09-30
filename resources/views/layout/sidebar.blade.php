@@ -78,11 +78,17 @@
         <i class="fas fa-users"></i>
         <span>Data Karyawan</span></a>
     </li>
+    
+    <li class="nav-item {{ request()->routeIs('karyawanAbsensi') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('karyawanAbsensi')}}">
+        <i class="fas fa-book"></i>
+        <span>Absen Karyawan</span></a>
+    </li>
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
       <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 
-  </ul>
-  <!-- End of Sidebar -->
+</ul>
+<!-- End of Sidebar -->

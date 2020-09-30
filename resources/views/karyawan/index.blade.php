@@ -22,6 +22,7 @@
                         <th>Role</th>
                         <th>Status</th>
                         <th>Tgl. Gabung</th>
+                        <th>Upah</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -65,12 +66,22 @@
                     <label>Alamat</label>
                     <input type="text" class="form-control" name="alamat" id="alamat" autocomplete="off">
                 </div>
+                <div class="form-group">
+                    <label>Upah</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          Rp
+                        </div>
+                      </div>
+                      <input type="text" class="form-control" name="upah" id="upah" data-a-dec="," data-a-sep="." autocomplete="off">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
                             <label for="role">Role</label>
                             <select class="form-control" id="role" name="role">
-                                <option value="">Pilih role</option>
                                 <option value="1">Admin</option>
                                 <option value="2">Sopir</option>
                                 <option value="3">Kuli</option>
@@ -127,12 +138,22 @@
                     <label>Alamat</label>
                     <input type="text" class="form-control" name="alamat" id="alamatEdit" autocomplete="off">
                 </div>
+                <div class="form-group">
+                    <label>Upah</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          Rp
+                        </div>
+                      </div>
+                      <input type="text" class="form-control" name="upah" id="upahEdit" data-a-dec="," data-a-sep="." autocomplete="off">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
                             <label for="role">Role</label>
                             <select class="form-control" id="roleEdit" name="role">
-                                <option value="">Pilih role</option>
                                 <option value="1">Admin</option>
                                 <option value="2">Sopir</option>
                                 <option value="3">Kuli</option>
@@ -152,7 +173,7 @@
             </div>
             <div class="modal-footer bg-whitesmoke br">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="buttonUpdate">Simpan data</button>
+                <button type="submit" class="btn btn-primary" id="buttonUpdate">Update data</button>
                 </form>
             </div>
         </div>
@@ -190,10 +211,16 @@ $(document).ready(function(){
             data: 'tanggal', 
             name: 'tanggal'
         }, {
+            data: 'upah', 
+            name: 'upah'
+        }, {
             data: 'aksi', 
             name: 'aksi'
         }]
   });
+
+  // autoNumeric pada form harga
+  $('#upah, #upahEdit').autoNumeric('init', {mDec: '0'});
 
   // reset form saat modal close
   $('.modal').on('hidden.bs.modal', function(){
@@ -210,12 +237,14 @@ $(document).ready(function(){
       let alamat = button.data('alamat');
       let role = button.data('role');
       let status = button.data('status');
+      let upah = button.data('upah');
       let modal = $(this);
       modal.find('.modal-body #idEdit').val(id);
       modal.find('.modal-body #id_karyawanEdit').val(idKaryawan);
       modal.find('.modal-body #namaEdit').val(nama);
       modal.find('.modal-body #no_telpEdit').val(noTelp);
       modal.find('.modal-body #alamatEdit').val(alamat);
+      modal.find('.modal-body #upahEdit').val(upah);
       modal.find('.modal-body #roleEdit option').each((i, data) => {
         if(data.value == role) {
           $(data).attr('selected','selected');
