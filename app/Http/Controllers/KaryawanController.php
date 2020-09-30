@@ -110,8 +110,6 @@ class KaryawanController extends Controller
         $tanggalAbsen = explode('/', $request->tanggal_absen);
         $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
 
-        $upah = Karyawan::all();
-
         $karyawan = $request->idKaryawan;
         $absensi = $request->absensi;
         $keterangan = $request->keterangan;
@@ -122,10 +120,36 @@ class KaryawanController extends Controller
                 'karyawan_id' => $kr,
                 'absensi' => $absensi[$key],
                 'keterangan' => $keterangan[$key],
-                'upah' => $absensi[$key] == 1 ? $upah[$key]->upah : 0
+                'upah' => $absensi[$key] == 1 ? Karyawan::find($kr)->upah : 0
             ]);
         }
 
         return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
+    }
+
+    public function absensiIndex()
+    {
+        return view('karyawan.absensiIndex');
+    }
+
+    public function absensiData()
+    {
+        $absensi = Absensi::groupBy('tanggal_absen')->orderBy('tanggal_absen', 'desc');
+        return DataTables::eloquent($absensi)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($p) {
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary"><i class="far fa-edit"></i></a>
+                <a href="#" class="btn btn-sm btn-icon btn-danger" data-tanggal_absen="' . \Carbon\Carbon::parse($p->tanggal_absen)->translatedFormat('D, d-m-Y') . '"  id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
+            })
+            ->addColumn('total_absen', function ($a) {
+                $absen = Absensi::where('tanggal_absen', $a->tanggal_absen)->where('absensi', '>', 1)->get();
+                return count($absen);
+            })
+            ->editColumn('tanggal_absen', function ($t) {
+                return \Carbon\Carbon::parse($t->tanggal_absen)
+                    ->translatedFormat('D, d-m-Y');
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 }

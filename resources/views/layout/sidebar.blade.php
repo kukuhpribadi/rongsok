@@ -84,6 +84,12 @@
         <i class="fas fa-book"></i>
         <span>Absen Karyawan</span></a>
     </li>
+    
+    <li class="nav-item {{ request()->routeIs('absensiIndex') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('absensiIndex')}}">
+        <i class="fas fa-ellipsis-h"></i>
+        <span>Data Absen Karyawan</span></a>
+    </li>
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
