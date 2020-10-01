@@ -10,7 +10,7 @@
             </div>
             {{-- body --}}
             <div class="card-body">
-                <form action="{{route('karyawanAbsensiStore')}}" method="post">
+                <form action="{{route('karyawanAbsensiStore')}}" method="post" id="formTambah">
                 @csrf
                     <div class="row">
                         <div class="form-group col-3">
@@ -51,7 +51,7 @@
                         </tr>
                         @endforeach
                     </table>
-                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-block" id="simpanData">Submit</button>
                 </form>
             </div>
         </div>
@@ -68,6 +68,32 @@ $(document).ready(function(){
         locale: 'id',
         defaultDate: new Date(),
     });
+
+    $('#simpanData').on('click', function (e){
+        e.preventDefault();
+        let data = $('#formTambah').serialize();
+        $.ajax({
+            url: "{{route('karyawanAbsensiStore')}}",
+            method: 'post',
+            data: data,
+            success: function(res) {
+                Swal.fire('Sukses!','Absensi berhasil ditambahkan','success')
+                    .then(function(){ 
+                        location.replace("{{route('absensiIndex')}}");
+                    });
+            },
+            error: function(data) {
+                let pesan = data.responseJSON.message;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: pesan,
+                })
+            }
+        })
+
+    });
+
 });
 </script>    
 @endsection

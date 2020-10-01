@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Absensi;
 use App\Karyawan;
+use Error;
+use Exception;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 use Yajra\DataTables\Facades\DataTables;
 
 class KaryawanController extends Controller
@@ -109,22 +112,58 @@ class KaryawanController extends Controller
     {
         $tanggalAbsen = explode('/', $request->tanggal_absen);
         $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
+        $dataTanggalDB = Absensi::all();
 
-        $karyawan = $request->idKaryawan;
-        $absensi = $request->absensi;
-        $keterangan = $request->keterangan;
-
-        foreach ($karyawan as $key => $kr) {
-            Absensi::create([
-                'tanggal_absen' => $tanggalAbsen,
-                'karyawan_id' => $kr,
-                'absensi' => $absensi[$key],
-                'keterangan' => $keterangan[$key],
-                'upah' => $absensi[$key] == 1 ? Karyawan::find($kr)->upah : 0
-            ]);
+        $cekTanggal = [];
+        foreach ($dataTanggalDB as $key => $value) {
+            $cekTanggal[] = $dataTanggalDB[$key]->tanggal_absen;
         }
 
-        return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
+
+        if (in_array($tanggalAbsen, $cekTanggal)) {
+            throw new Exception("Sudah melakukan absen pada tanggal ini");
+        } else {
+            $karyawan = $request->idKaryawan;
+            $absensi = $request->absensi;
+            $keterangan = $request->keterangan;
+
+            foreach ($karyawan as $key => $kr) {
+                Absensi::create([
+                    'tanggal_absen' => $tanggalAbsen,
+                    'karyawan_id' => $kr,
+                    'absensi' => $absensi[$key],
+                    'keterangan' => $keterangan[$key],
+                    'upah' => $absensi[$key] == 1 ? Karyawan::find($kr)->upah : 0
+                ]);
+            }
+
+            // return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
+        }
+
+        // foreach ($cektanggal as $key => $value) {
+        //     if ($cektanggal[$key]->tanggal_absen == $tanggalAbsen) {
+        //         echo $cektanggal[$key]->tanggal_absen;
+        //         return 'data sudah ada';
+        //         // throw new Exception("Sudah melakukan absen pada tanggal ini");
+        //     }
+        //     return 'data berhasil ditambahkan';
+        // }
+
+        // $karyawan = $request->idKaryawan;
+        // $absensi = $request->absensi;
+        // $keterangan = $request->keterangan;
+
+        // foreach ($karyawan as $key => $kr) {
+        //     Absensi::create([
+        //         'tanggal_absen' => $tanggalAbsen,
+        //         'karyawan_id' => $kr,
+        //         'absensi' => $absensi[$key],
+        //         'keterangan' => $keterangan[$key],
+        //         'upah' => $absensi[$key] == 1 ? Karyawan::find($kr)->upah : 0
+        //     ]);
+        // }
+
+        // return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
     }
 
     public function absensiIndex()
