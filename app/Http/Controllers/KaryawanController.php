@@ -139,31 +139,6 @@ class KaryawanController extends Controller
 
             // return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
         }
-
-        // foreach ($cektanggal as $key => $value) {
-        //     if ($cektanggal[$key]->tanggal_absen == $tanggalAbsen) {
-        //         echo $cektanggal[$key]->tanggal_absen;
-        //         return 'data sudah ada';
-        //         // throw new Exception("Sudah melakukan absen pada tanggal ini");
-        //     }
-        //     return 'data berhasil ditambahkan';
-        // }
-
-        // $karyawan = $request->idKaryawan;
-        // $absensi = $request->absensi;
-        // $keterangan = $request->keterangan;
-
-        // foreach ($karyawan as $key => $kr) {
-        //     Absensi::create([
-        //         'tanggal_absen' => $tanggalAbsen,
-        //         'karyawan_id' => $kr,
-        //         'absensi' => $absensi[$key],
-        //         'keterangan' => $keterangan[$key],
-        //         'upah' => $absensi[$key] == 1 ? Karyawan::find($kr)->upah : 0
-        //     ]);
-        // }
-
-        // return redirect(route('karyawanAbsensi'))->with('sukses', 'Absensi berhasil!');
     }
 
     public function absensiIndex()
@@ -177,7 +152,7 @@ class KaryawanController extends Controller
         return DataTables::eloquent($absensi)
             ->addIndexColumn()
             ->addColumn('aksi', function ($p) {
-                return '<a href="#" class="btn btn-sm btn-icon btn-primary"><i class="far fa-edit"></i></a>
+                return '<a href="' . route("absensiEdit", $p->tanggal_absen) . '" class="btn btn-sm btn-icon btn-primary"><i class="far fa-edit"></i></a>
                 <a href="#" class="btn btn-sm btn-icon btn-danger" data-tanggal_absen="' . \Carbon\Carbon::parse($p->tanggal_absen)->translatedFormat('D, d-m-Y') . '"  id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
             })
             ->addColumn('total_absen', function ($a) {
@@ -190,5 +165,13 @@ class KaryawanController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
+    }
+
+    public function absensiEdit($tanggal)
+    {
+        $tanggalEdit = explode('-', $tanggal);
+        $tanggalEdit = $tanggalEdit[2] . '/' . $tanggalEdit[1] . '/' . $tanggalEdit[0];
+        $data = Absensi::where('tanggal_absen', $tanggal)->get();
+        return view('karyawan.absensiEdit', compact('data', 'tanggalEdit'));
     }
 }
