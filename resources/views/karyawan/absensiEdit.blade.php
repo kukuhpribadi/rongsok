@@ -10,7 +10,7 @@
             </div>
             {{-- body --}}
             <div class="card-body">
-                <form action="{{route('absensiUpdate', $tanggal)}}" method="post" id="formTambah">
+                <form action="{{route('absensiUpdate', $tanggal)}}" method="post" id="formEdit">
                 @csrf
                     <div class="row">
                         <div class="form-group col-3">
@@ -69,7 +69,30 @@ $(document).ready(function(){
         defaultDate: new Date(),
     });
 
-    
+    $('#updateData').on('click', function (e){
+        e.preventDefault();
+        let data = $('#formEdit').serialize();
+        $.ajax({
+            url: "{{route('absensiUpdate', $tanggal)}}",
+            method: 'post',
+            data: data,
+            success: function(res) {
+                Swal.fire('Sukses!','Absensi berhasil ditambahkan','success')
+                    .then(function(){ 
+                        location.replace("{{route('absensiIndex')}}");
+                    });
+            },
+            error: function(data) {
+                let pesan = data.responseJSON.message;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: pesan,
+                })
+            }
+        })
+
+    });
 
 });
 </script>    

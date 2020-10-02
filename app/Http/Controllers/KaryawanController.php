@@ -177,21 +177,44 @@ class KaryawanController extends Controller
 
     public function absensiUpdate(Request $request, $tanggal)
     {
+        // $tanggalAbsen = explode('/', $request->tanggal_absen);
+        // $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
+
+        // $absensi = Absensi::where('tanggal_absen', $tanggal)->get();
+        // foreach ($absensi as $key => $value) {
+        //     $absensi[$key]->update([
+        //         'tanggal_absen' => $tanggalAbsen,
+        //         'karyawan_id' => $request->idKaryawan[$key],
+        //         'absensi' => $request->absensi[$key],
+        //         'keterangan' => $request->keterangan[$key],
+        //         'upah' => $request->absensi[$key] == 1 ? Karyawan::find($request->idKaryawan[$key])->upah : 0
+        //     ]);
+        // }
+
+        // return  redirect(route('absensiIndex'))->with('sukses', 'Absensi berhasil diubah!');
         $tanggalAbsen = explode('/', $request->tanggal_absen);
         $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
+        $dataTanggalDB = Absensi::all();
 
-        $absensi = Absensi::where('tanggal_absen', $tanggal)->get();
-        foreach ($absensi as $key => $value) {
-            $absensi[$key]->update([
-                'tanggal_absen' => $tanggalAbsen,
-                'karyawan_id' => $request->idKaryawan[$key],
-                'absensi' => $request->absensi[$key],
-                'keterangan' => $request->keterangan[$key],
-                'upah' => $request->absensi[$key] == 1 ? Karyawan::find($request->idKaryawan[$key])->upah : 0
-            ]);
+        $cekTanggal = [];
+        foreach ($dataTanggalDB as $key => $value) {
+            $cekTanggal[] = $dataTanggalDB[$key]->tanggal_absen;
         }
 
-        return  redirect(route('absensiIndex'))->with('sukses', 'Absensi berhasil diubah!');
+        if (in_array($tanggalAbsen, $cekTanggal) && $tanggalAbsen != $tanggal) {
+            throw new Exception("Sudah melakukan absen pada tanggal ini");
+        } else {
+            $absensi = Absensi::where('tanggal_absen', $tanggal)->get();
+            foreach ($absensi as $key => $value) {
+                $absensi[$key]->update([
+                    'tanggal_absen' => $tanggalAbsen,
+                    'karyawan_id' => $request->idKaryawan[$key],
+                    'absensi' => $request->absensi[$key],
+                    'keterangan' => $request->keterangan[$key],
+                    'upah' => $request->absensi[$key] == 1 ? Karyawan::find($request->idKaryawan[$key])->upah : 0
+                ]);
+            }
+        }
     }
 
     public function absensiDelete($tanggal)
