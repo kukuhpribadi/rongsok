@@ -43,3 +43,5 @@ Route::post('/karyawan/absensi', 'KaryawanController@absensiStore')->name('karya
 Route::get('/karyawan/absensi/index', 'KaryawanController@absensiIndex')->name('absensiIndex');
 Route::get('/karyawan/absensi/data', 'KaryawanController@absensiData')->name('absensiData');
 Route::get('/karyawan/absensi/edit/{tanggal}', 'KaryawanController@absensiEdit')->name('absensiEdit');
+Route::post('/karyawan/absensi/update/{tanggal}', 'KaryawanController@absensiUpdate')->name('absensiUpdate');
+Route::get('/karyawan/absensi/absensi/{tanggal}', 'KaryawanController@absensiDelete')->name('absensiDelete');

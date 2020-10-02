@@ -153,7 +153,7 @@ class KaryawanController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($p) {
                 return '<a href="' . route("absensiEdit", $p->tanggal_absen) . '" class="btn btn-sm btn-icon btn-primary"><i class="far fa-edit"></i></a>
-                <a href="#" class="btn btn-sm btn-icon btn-danger" data-tanggal_absen="' . \Carbon\Carbon::parse($p->tanggal_absen)->translatedFormat('D, d-m-Y') . '"  id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
+                <a href="' . route("absensiDelete", $p->tanggal_absen) . '" class="btn btn-sm btn-icon btn-danger" data-tanggal_absen="' . \Carbon\Carbon::parse($p->tanggal_absen)->translatedFormat('D, d-m-Y') . '"  id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
             })
             ->addColumn('total_absen', function ($a) {
                 $absen = Absensi::where('tanggal_absen', $a->tanggal_absen)->where('absensi', '>', 1)->get();
@@ -172,6 +172,30 @@ class KaryawanController extends Controller
         $tanggalEdit = explode('-', $tanggal);
         $tanggalEdit = $tanggalEdit[2] . '/' . $tanggalEdit[1] . '/' . $tanggalEdit[0];
         $data = Absensi::where('tanggal_absen', $tanggal)->get();
-        return view('karyawan.absensiEdit', compact('data', 'tanggalEdit'));
+        return view('karyawan.absensiEdit', compact('data', 'tanggalEdit', 'tanggal'));
+    }
+
+    public function absensiUpdate(Request $request, $tanggal)
+    {
+        $tanggalAbsen = explode('/', $request->tanggal_absen);
+        $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
+
+        $absensi = Absensi::where('tanggal_absen', $tanggal)->get();
+        foreach ($absensi as $key => $value) {
+            $absensi[$key]->update([
+                'tanggal_absen' => $tanggalAbsen,
+                'karyawan_id' => $request->idKaryawan[$key],
+                'absensi' => $request->absensi[$key],
+                'keterangan' => $request->keterangan[$key],
+                'upah' => $request->absensi[$key] == 1 ? Karyawan::find($request->idKaryawan[$key])->upah : 0
+            ]);
+        }
+
+        return  redirect(route('absensiIndex'))->with('sukses', 'Absensi berhasil diubah!');
+    }
+
+    public function absensiDelete($tanggal)
+    {
+        Absensi::where('tanggal_absen', $tanggal)->delete();
     }
 }

@@ -55,6 +55,47 @@ $(document).ready(function(){
         }]
   });
 
+  //delete data ajax
+  $('#dataTable').on('click', '#buttonDelete',function(e) {
+    e.preventDefault();
+
+    let url = $(this).attr('href');
+    let tanggal = $(this).attr("data-tanggal_absen");
+
+    Swal.fire({
+        title: 'Yakin akan menghapus data?', 
+        text: `${tanggal}`, 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#d33', 
+        cancelButtonColor: '#3085d6', 
+        confirmButtonText: 'Hapus!'
+    })
+    .then((result) => {
+      if (result.value) {
+          $.ajax({
+              url: url, 
+              method: "GET", 
+              success: function(response) {
+                  $('#dataTable').DataTable().ajax.reload();
+                  Swal.fire(
+                      'Deleted!', 
+                      'Your file has been deleted.', 
+                      'success'
+                  )
+              }, 
+              error: function(xhr) {
+                  Swal.fire({
+                      type: 'error', 
+                      title: 'Oops...', 
+                      text: 'Something went wrong!'
+                  });
+                }
+            });
+      }
+    })
+  });
+
 });
 </script>
 @endsection
