@@ -17,6 +17,7 @@
                         <th>No</th>
                         <th>ID Karyawan</th>
                         <th>Nama</th>
+                        <th>Upah per Hari</th>
                         <th>Kehadiran</th>
                         <th>Tidak Hadir</th>
                         <th>Libur</th>
@@ -29,11 +30,18 @@
                         <td>{{$loop->iteration}}</td>
                         <td>{{$dt->karyawan->id_karyawan}}</td>
                         <td>{{$dt->karyawan->nama}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>Rp. {{number_format($dt->karyawan->upah,0,',','.')}}</td>
                         <td>
-                            Rp. {{number_format($dt->where('karyawan_id', $dt->karyawan->id)->where('absensi', 1)->sum('upah'),0, ',', '.')}}
+                            {{$dt->where('karyawan_id', $dt->karyawan->id)->where('absensi', 1)->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->count()}}
+                        </td>
+                        <td>
+                            {{$dt->where('karyawan_id', $dt->karyawan->id)->where('absensi', 2)->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->count()}}
+                        </td>
+                        <td>
+                            {{$dt->where('karyawan_id', $dt->karyawan->id)->where('absensi', 3)->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->count()}}
+                        </td>
+                        <td>
+                            Rp. {{number_format($dt->where('karyawan_id', $dt->karyawan->id)->where('absensi', 1)->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->sum('upah'),0, ',', '.')}}
                         </td>
                     </tr>
                     @endforeach

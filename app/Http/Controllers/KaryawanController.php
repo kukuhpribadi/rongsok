@@ -210,7 +210,7 @@ class KaryawanController extends Controller
 
     public function karyawanLaporan()
     {
-        $laporan = LaporanKaryawan::all();
+        $laporan = LaporanKaryawan::orderBy('created_at', 'desc')->get();
         return view('karyawan.laporan', compact('laporan'));
     }
 
@@ -235,7 +235,8 @@ class KaryawanController extends Controller
         $tanggalEnd = $tanggalEnd[2] . '-' . $tanggalEnd[1] . '-' . $tanggalEnd[0];
 
         $data = Absensi::groupBy('karyawan_id')->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->get();
-
-        return view('karyawan.laporanDetail', compact('rangeTanggal', 'data'));
+        // $data = Absensi::whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->get();
+        // dd($data);
+        return view('karyawan.laporanDetail', compact('rangeTanggal', 'data', 'tanggalStart', 'tanggalEnd'));
     }
 }

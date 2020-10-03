@@ -77,10 +77,8 @@ $(document).ready(function(){
             method: 'post',
             data: data,
             success: function(res) {
-                Swal.fire('Sukses!','Absensi berhasil ditambahkan','success')
-                    .then(function(){ 
-                        location.replace("{{route('absensiIndex')}}");
-                    });
+                Swal.fire('Sukses!','Absensi berhasil ditambahkan','success');
+                location.replace("{{route('absensiIndex')}}");
             },
             error: function(data) {
                 let pesan = data.responseJSON.message;
