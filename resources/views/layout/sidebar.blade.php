@@ -90,6 +90,15 @@
         <i class="fas fa-ellipsis-h"></i>
         <span>Data Absen Karyawan</span></a>
     </li>
+    
+    <li class="nav-item {{ request()->routeIs('karyawanLaporan') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('karyawanLaporan')}}">
+        <i class="fas fa-book-reader"></i>
+        <span>Laporan Kinerja Karyawan</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

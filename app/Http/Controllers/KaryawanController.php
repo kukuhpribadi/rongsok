@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Absensi;
 use App\Karyawan;
+use App\LaporanKaryawan;
 use Error;
 use Exception;
 use Illuminate\Http\Request;
@@ -177,21 +178,6 @@ class KaryawanController extends Controller
 
     public function absensiUpdate(Request $request, $tanggal)
     {
-        // $tanggalAbsen = explode('/', $request->tanggal_absen);
-        // $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
-
-        // $absensi = Absensi::where('tanggal_absen', $tanggal)->get();
-        // foreach ($absensi as $key => $value) {
-        //     $absensi[$key]->update([
-        //         'tanggal_absen' => $tanggalAbsen,
-        //         'karyawan_id' => $request->idKaryawan[$key],
-        //         'absensi' => $request->absensi[$key],
-        //         'keterangan' => $request->keterangan[$key],
-        //         'upah' => $request->absensi[$key] == 1 ? Karyawan::find($request->idKaryawan[$key])->upah : 0
-        //     ]);
-        // }
-
-        // return  redirect(route('absensiIndex'))->with('sukses', 'Absensi berhasil diubah!');
         $tanggalAbsen = explode('/', $request->tanggal_absen);
         $tanggalAbsen = $tanggalAbsen[2] . '-' . $tanggalAbsen[1] . '-' . $tanggalAbsen[0];
         $dataTanggalDB = Absensi::all();
@@ -220,5 +206,36 @@ class KaryawanController extends Controller
     public function absensiDelete($tanggal)
     {
         Absensi::where('tanggal_absen', $tanggal)->delete();
+    }
+
+    public function karyawanLaporan()
+    {
+        $laporan = LaporanKaryawan::all();
+        return view('karyawan.laporan', compact('laporan'));
+    }
+
+    public function karyawanLaporanStore(Request $request)
+    {
+        $range = LaporanKaryawan::create([
+            'range' => $request->tanggalStart . '-' . $request->tanggalEnd
+        ]);
+
+        return redirect(route('karyawanLaporan'))->with('sukses', 'Laporan berhasil dibuat!');
+    }
+
+    public function karyawanLaporanDetail($id)
+    {
+        $getTanggal = LaporanKaryawan::find($id);
+        $rangeTanggal = $getTanggal->range;
+        $getTanggal = explode('-', $getTanggal->range);
+
+        $tanggalStart = explode('/', $getTanggal[0]);
+        $tanggalStart = $tanggalStart[2] . '-' . $tanggalStart[1] . '-' . $tanggalStart[0];
+        $tanggalEnd = explode('/', $getTanggal[1]);
+        $tanggalEnd = $tanggalEnd[2] . '-' . $tanggalEnd[1] . '-' . $tanggalEnd[0];
+
+        $data = Absensi::groupBy('karyawan_id')->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->get();
+
+        return view('karyawan.laporanDetail', compact('rangeTanggal', 'data'));
     }
 }
