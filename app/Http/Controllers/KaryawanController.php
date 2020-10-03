@@ -239,4 +239,9 @@ class KaryawanController extends Controller
         // dd($data);
         return view('karyawan.laporanDetail', compact('rangeTanggal', 'data', 'tanggalStart', 'tanggalEnd'));
     }
+
+    public function karyawanLaporanDelete($id)
+    {
+        LaporanKaryawan::find($id)->delete();
+    }
 }

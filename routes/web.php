@@ -48,3 +48,4 @@ Route::get('/karyawan/absensi/absensi/{tanggal}', 'KaryawanController@absensiDel
 Route::get('/karyawan/laporan', 'KaryawanController@karyawanLaporan')->name('karyawanLaporan');
 Route::post('/karyawan/laporan', 'KaryawanController@karyawanLaporanStore')->name('karyawanLaporanStore');
 Route::get('/karyawan/laporan/{id}', 'KaryawanController@karyawanLaporanDetail')->name('karyawanLaporanDetail');
+Route::get('/karyawan/laporan/delete/{id}', 'KaryawanController@karyawanLaporanDelete')->name('karyawanLaporanDelete');

@@ -27,7 +27,7 @@
                         <td>{{$lprn->range}}</td>
                         <td>
                             <a href="{{route('karyawanLaporanDetail', $lprn->id)}}" class="btn btn-sm btn-icon btn-success"><i class="far fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt"></i></a>
+                            <a href="{{route('karyawanLaporanDelete', $lprn->id)}}" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-range="{{$lprn->range}}"><i class="far fa-trash-alt"></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -98,6 +98,48 @@ $(document).ready(function(){
         locale: 'id',
         defaultDate: new Date(),
     });
+
+    //delete data ajax
+  $('#dataTable').on('click', '#buttonDelete',function(e) {
+    e.preventDefault();
+
+    let url = $(this).attr('href');
+    let range = $(this).attr("data-range");
+
+    Swal.fire({
+        title: 'Yakin akan menghapus data?', 
+        text: `${range}`, 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#d33', 
+        cancelButtonColor: '#3085d6', 
+        confirmButtonText: 'Hapus!'
+    })
+    .then((result) => {
+      if (result.value) {
+          $.ajax({
+              url: url, 
+              method: "GET", 
+              success: function(response) {
+                //   $('#dataTable').DataTable().ajax.reload();
+                  location.reload();
+                  Swal.fire(
+                      'Deleted!', 
+                      'Your file has been deleted.', 
+                      'success'
+                  )
+              }, 
+              error: function(xhr) {
+                  Swal.fire({
+                      type: 'error', 
+                      title: 'Oops...', 
+                      text: 'Something went wrong!'
+                  });
+                }
+            });
+      }
+    })
+  });
 
 });
 </script>    

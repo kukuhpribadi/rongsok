@@ -39,7 +39,7 @@
                         </select>
                       </td>
                       <td>
-                        <input type="text" class="form-control" name="harga[]" id="harga" data-a-dec="," data-a-sep=".">
+                        <input type="text" class="form-control" name="harga[]" id="harga" data-a-dec="," data-a-sep="." autocomplete="off">
                       </td>
                       <td>
                         <input type="text" class="form-control" name="qty[]" id="qty" autocomplete="off">
@@ -51,7 +51,7 @@
                         <button class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt" id="iconSampah"></i></button>
                       </td>
                       <td>
-                        <input type="text" class="form-control" name="jumlah[]" id="jumlah" data-a-dec="," data-a-sep=".">
+                        <input type="text" class="form-control" name="jumlah[]" id="jumlah" data-a-dec="," data-a-sep="." readonly>
                       </td>
                     </tr>
                     <tr class="rowAddBtn">
