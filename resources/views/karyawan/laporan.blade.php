@@ -17,6 +17,8 @@
                     <tr>
                         <th>No</th>
                         <th>Tanggal</th>
+                        <th>Status pembayaran</th>
+                        <th>Total</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -25,6 +27,8 @@
                     <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$lprn->range}}</td>
+                        <td>{!!$lprn->status == 1 ? '<span class="badge badge-success">Success</span>' : '<span class="badge badge-warning">Pending</span>'!!}</td>
+                        <td>Rp. {{number_format($lprn->total, 0, ',', '.')}}</td>
                         <td>
                             <a href="{{route('karyawanLaporanDetail', $lprn->id)}}" class="btn btn-sm btn-icon btn-success"><i class="far fa-eye"></i></a>
                             <a href="{{route('karyawanLaporanDelete', $lprn->id)}}" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-range="{{$lprn->range}}"><i class="far fa-trash-alt"></i></a>

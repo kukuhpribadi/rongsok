@@ -49,3 +49,4 @@ Route::get('/karyawan/laporan', 'KaryawanController@karyawanLaporan')->name('kar
 Route::post('/karyawan/laporan', 'KaryawanController@karyawanLaporanStore')->name('karyawanLaporanStore');
 Route::get('/karyawan/laporan/{id}', 'KaryawanController@karyawanLaporanDetail')->name('karyawanLaporanDetail');
 Route::get('/karyawan/laporan/delete/{id}', 'KaryawanController@karyawanLaporanDelete')->name('karyawanLaporanDelete');
+Route::post('/karyawan/laporan/update/{id}', 'KaryawanController@karyawanLaporanUpdate')->name('karyawanLaporanUpdate');

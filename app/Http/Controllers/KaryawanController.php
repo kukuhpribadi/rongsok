@@ -226,6 +226,7 @@ class KaryawanController extends Controller
     public function karyawanLaporanDetail($id)
     {
         $getTanggal = LaporanKaryawan::find($id);
+        $status = $getTanggal->status;
         $rangeTanggal = $getTanggal->range;
         $getTanggal = explode('-', $getTanggal->range);
 
@@ -235,13 +236,39 @@ class KaryawanController extends Controller
         $tanggalEnd = $tanggalEnd[2] . '-' . $tanggalEnd[1] . '-' . $tanggalEnd[0];
 
         $data = Absensi::groupBy('karyawan_id')->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->get();
-        // $data = Absensi::whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->get();
-        // dd($data);
-        return view('karyawan.laporanDetail', compact('rangeTanggal', 'data', 'tanggalStart', 'tanggalEnd'));
+
+        $grandTotal = Absensi::where('absensi', 1)->whereBetween('tanggal_absen', [$tanggalStart, $tanggalEnd])->get();
+
+        return view('karyawan.laporanDetail', compact('rangeTanggal', 'data', 'tanggalStart', 'tanggalEnd', 'grandTotal', 'id', 'status'));
     }
 
     public function karyawanLaporanDelete($id)
     {
         LaporanKaryawan::find($id)->delete();
+    }
+
+    public function karyawanLaporanUpdate(Request $request, $id)
+    {
+        $updatePembayaranUpah = LaporanKaryawan::find($id);
+
+        $status = 1;
+        if ($updatePembayaranUpah->status == 1) {
+            $status = 0;
+        }
+
+        $total = $request->grandTotal;
+        if ($status == 0) {
+            $total = 0;
+        }
+        $updatePembayaranUpah->update([
+            'status' => $status,
+            'total' => $total
+        ]);
+
+        if ($status == 1) {
+            return redirect(route('karyawanLaporan'))->with('sukses', 'Pembayaran berhasil!');
+        } else {
+            return redirect(route('karyawanLaporan'))->with('sukses', 'Pembayaran dibatalkan!');
+        }
     }
 }
