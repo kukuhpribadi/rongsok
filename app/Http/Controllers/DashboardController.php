@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Karyawan;
+use App\LaporanKaryawan;
 use App\TransaksiBeli;
 use App\TransaksiJual;
 use Illuminate\Http\Request;
@@ -11,10 +12,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $upahKaryawan = LaporanKaryawan::all()->sum('total');
         $pengeluaran = TransaksiBeli::all()->sum(function ($row) {
             return $row->harga * $row->qty;
         });
-        $pengeluaran = number_format($pengeluaran, 0, ',', '.');
+        $pengeluaran = number_format($pengeluaran + $upahKaryawan, 0, ',', '.');
 
         $pendapatan = TransaksiJual::all()->sum(function ($row) {
             return $row->harga * $row->qty;
