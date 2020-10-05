@@ -13,8 +13,8 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item {{ request()->routeIs('dashboardIndex') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('dashboardIndex')}}">
+    <li class="nav-item {{ request()->routeIs('getDataBulanIni') ? 'active' : ''}}">
+      <a class="nav-link" href="{{route('getDataBulanIni')}}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>
