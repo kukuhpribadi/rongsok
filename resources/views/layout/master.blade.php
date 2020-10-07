@@ -130,6 +130,9 @@
   <script src="{{asset('vendor/moment/moment-with-locales.js')}}"></script>
   <script src="{{asset('vendor/tempusdominus/tempusdominus-bootstrap-4.min.js')}}"></script>
 
+  {{-- chartjs --}}
+  <script src="{{asset('vendor/chart.js/Chart.js')}}"></script>
+
   @if(Session::has('sukses'))
     <script>
         Swal.fire(
