@@ -51,13 +51,23 @@ class DashboardController extends Controller
         // chart
         for ($i = 1; $i <= $now->month; $i++) {
             $jmlBulan[] = $i;
-            $transaksi = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->groupBy('transaksi_beli_id')->get();
-            $jmlTransaksiPerBulan[] = $transaksi->count();
+
+            // pengeluaran atau pembelian
+            $transaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->get();
+            $pengeluaranUpah = LaporanKaryawan::whereYear('updated_at', $now->year)->whereMonth('updated_at', $i)->get();
+            $jmlTransaksiBeliPerBulan[] = $transaksiBeli->sum(function ($row) {
+                return $row->harga * $row->qty;
+            }) + $pengeluaranUpah->sum('total');
+
+            //penjualan atau pendapatan
+            $transaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->get();
+            $jmlTransaksiJualPerBulan[] = $transaksiJual->sum(function ($row) {
+                return $row->harga * $row->qty;
+            });
         }
 
-        // dd($jmlTransaksiPerHari);
 
-        return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlBulan', 'jmlTransaksiPerBulan', 'hargaBeli'));
+        return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlBulan', 'jmlTransaksiBeliPerBulan', 'hargaBeli', 'jmlTransaksiJualPerBulan'));
     }
 
     public function getDataBulanIni()
@@ -95,106 +105,24 @@ class DashboardController extends Controller
         // chart
         for ($i = 1; $i <= $now->day; $i++) {
             $jmlHari[] = $i;
-            $transaksi = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->groupBy('transaksi_beli_id')->get();
-            $jmlTransaksiPerHari[] = $transaksi->count();
+
+            // pengeluaran atau pembelian
+            $transaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->get();
+            $pengeluaranUpah = LaporanKaryawan::whereYear('updated_at', $now->year)->whereMonth('updated_at', $now->month)->whereDay('updated_at', $i)->get();
+            $jmlTransaksiBeliPerHari[] = $transaksiBeli->sum(function ($row) {
+                return $row->harga * $row->qty;
+            }) + $pengeluaranUpah->sum('total');
+
+            //penjualan atau pendapatan
+            $transaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->get();
+            $jmlTransaksiJualPerHari[] = $transaksiJual->sum(function ($row) {
+                return $row->harga * $row->qty;
+            });
         }
 
         // harga beli barang
         $hargaBeli = Barang::orderBy('harga', 'desc')->get();
 
-        return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlHari', 'jmlTransaksiPerHari', 'hargaBeli'));
-    }
-
-    public function getDataHariIni()
-    {
-        $now = Carbon::now();
-
-        // upah karyawan
-        $upahKaryawan = LaporanKaryawan::whereDate('updated_at', $now->today())->get();
-        $upahKaryawan = $upahKaryawan->sum('total');
-
-        // pengeluaran
-        $pengeluaran = TransaksiBeli::whereDate('created_at', $now->today())->get();
-        $pengeluaran = $pengeluaran->sum(function ($row) {
-            return $row->harga * $row->qty;
-        });
-        $pengeluaran = number_format($pengeluaran + $upahKaryawan, 0, ',', '.');
-
-        // pendapatan
-        $pendapatan = TransaksiJual::whereDate('created_at', $now->today())->get();
-        $pendapatan = $pendapatan->sum(function ($row) {
-            return $row->harga * $row->qty;
-        });
-        $pendapatan = number_format($pendapatan, 0, ',', '.');
-
-        // jml transaksi
-        $jmlTransaksiBeli = TransaksiBeli::whereDate('created_at', $now->today())->groupBy('transaksi_beli_id')->get()->count();
-        $jmlTransaksiJual = TransaksiJual::whereDate('created_at', $now->today())->groupBy('transaksi_jual_id')->get()->count();
-
-        //jml karyawan
-        $jmlKaryawan = Karyawan::where('status', 1)->get()->count();
-
-        // nama button
-        $namaButton = 'Hari ini';
-
-        // chart
-        for ($i = 1; $i <= $now->day; $i++) {
-            $jmlHari[] = $i;
-            $transaksi = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->groupBy('transaksi_beli_id')->get();
-            $jmlTransaksiPerHari[] = $transaksi->count();
-        }
-
-        // harga beli barang
-        $hargaBeli = Barang::orderBy('harga', 'desc')->get();
-
-        return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlHari', 'jmlTransaksiPerHari', 'hargaBeli'));
-    }
-
-    public function getDataMingguIni()
-    {
-
-        $now = Carbon::now();
-        $startOfWeek = $now->startOfWeek()->format('Y-m-d H:i');
-        $endOfWeek = $now->endOfWeek()->format('Y-m-d H:i');
-
-        // upah karyawan
-        $upahKaryawan = LaporanKaryawan::whereBetween('updated_at', [$startOfWeek, $endOfWeek])->get();
-        $upahKaryawan = $upahKaryawan->sum('total');
-
-        // pengeluaran
-        $pengeluaran = TransaksiBeli::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
-        $pengeluaran = $pengeluaran->sum(function ($row) {
-            return $row->harga * $row->qty;
-        });
-        $pengeluaran = number_format($pengeluaran + $upahKaryawan, 0, ',', '.');
-
-        // pendapatan
-        $pendapatan = TransaksiJual::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
-        $pendapatan = $pendapatan->sum(function ($row) {
-            return $row->harga * $row->qty;
-        });
-        $pendapatan = number_format($pendapatan, 0, ',', '.');
-
-        // jml transaksi
-        $jmlTransaksiBeli = TransaksiBeli::whereBetween('created_at', [$startOfWeek, $endOfWeek])->groupBy('transaksi_beli_id')->get()->count();
-        $jmlTransaksiJual = TransaksiJual::whereBetween('created_at', [$startOfWeek, $endOfWeek])->groupBy('transaksi_jual_id')->get()->count();
-
-        //jml karyawan
-        $jmlKaryawan = Karyawan::where('status', 1)->get()->count();
-
-        // nama button
-        $namaButton = 'Minggu ini';
-
-        // chart
-        for ($i = 1; $i <= Carbon::now()->day; $i++) {
-            $jmlHari[] = $i;
-            $transaksi = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->groupBy('transaksi_beli_id')->get();
-            $jmlTransaksiPerHari[] = $transaksi->count();
-        }
-
-        // harga beli barang
-        $hargaBeli = Barang::orderBy('harga', 'desc')->get();
-
-        return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlHari', 'jmlTransaksiPerHari', 'hargaBeli'));
+        return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlHari', 'jmlTransaksiBeliPerHari', 'hargaBeli', 'jmlTransaksiJualPerHari'));
     }
 }

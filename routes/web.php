@@ -14,8 +14,6 @@
 Route::get('/', 'DashboardController@getDataBulanIni')->name('getDataBulanIni');
 Route::get('/data/tahun', 'DashboardController@getDataTahunIni')->name('getDataTahunIni');
 Route::get('/data/bulan', 'DashboardController@getDataBulanIni')->name('getDataBulanIni');
-Route::get('/data/hari', 'DashboardController@getDataHariIni')->name('getDataHariIni');
-Route::get('/data/minggu', 'DashboardController@getDataMingguIni')->name('getDataMingguIni');
 
 Route::get('/transaksi/beli', 'TransaksiBeliController@beli')->name('transaksiBeli');
 Route::post('/transaksi/beli', 'TransaksiBeliController@beliStore')->name('transaksiBeliStore');
