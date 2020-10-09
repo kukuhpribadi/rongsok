@@ -24,7 +24,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-      Transaksi Pembelian
+      Transaksi
     </div>
 
     <li class="nav-item {{ request()->routeIs('transaksiBeli') ? 'active' : ''}}">
@@ -32,38 +32,27 @@
         <i class="fas fa-shopping-cart"></i>
           <span>Beli barang</span></a>
     </li>
-
-    <li class="nav-item {{ request()->routeIs('barangIndex') ? 'active' : ''}}">
-        <a class="nav-link" href="{{route('barangIndex')}}">
-            <i class="fas fa-box-open"></i>
-          <span>Set harga barang</span></a>
-    </li>
-
-    <li class="nav-item {{ request()->routeIs('indexTransaksiBeli') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('indexTransaksiBeli')}}">
-        <i class="fas fa-ellipsis-h"></i>
-        <span>Data Pembelian</span></a>
-    </li>
     
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-      Transaksi Penjualan
-    </div>
-
     <li class="nav-item {{ request()->routeIs('transaksiJual') ? 'active' : ''}}">
       <a class="nav-link" href="{{route('transaksiJual')}}">
           <i class="fas fa-cash-register"></i>
         <span>Jual barang</span></a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('indexTransaksiJual') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('indexTransaksiJual')}}">
-        <i class="fas fa-ellipsis-h"></i>
-        <span>Data Penjualan</span></a>
+    <li class="nav-item">
+      <a class="nav-link {{ Route::is(['barangIndex', 'indexTransaksiBeli', 'indexTransaksiJual'])  ? '' : 'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Data & Set transaksi</span>
+      </a>
+      <div id="collapseOne" class="collapse {{ Route::is(['barangIndex', 'indexTransaksiBeli', 'indexTransaksiJual'])  ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item {{ Route::is('barangIndex*') ? 'active' : ''}}" href="{{route('barangIndex')}}">Set harga barang</a>
+          <a class="collapse-item {{ Route::is('indexTransaksiBeli*') ? 'active' : ''}}" href="{{route('indexTransaksiBeli')}}">Data Pembelian</a>
+          <a class="collapse-item {{ Route::is('indexTransaksiJual*') ? 'active' : ''}}" href="{{route('indexTransaksiJual')}}">Data Penjualan</a>
+        </div>
+      </div>
     </li>
+
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -73,28 +62,20 @@
       Karyawan
     </div>
 
-    <li class="nav-item {{ request()->routeIs('karyawanIndex') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('karyawanIndex')}}">
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('karyawan*')  ? '' : 'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-users"></i>
-        <span>Data Karyawan</span></a>
-    </li>
-    
-    <li class="nav-item {{ request()->routeIs('karyawanAbsensi') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('karyawanAbsensi')}}">
-        <i class="fas fa-book"></i>
-        <span>Absen Karyawan</span></a>
-    </li>
-    
-    <li class="nav-item {{ request()->routeIs('absensiIndex') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('absensiIndex')}}">
-        <i class="fas fa-ellipsis-h"></i>
-        <span>Data Absen Karyawan</span></a>
-    </li>
-    
-    <li class="nav-item {{ request()->routeIs('karyawanLaporan') ? 'active' : ''}}">
-      <a class="nav-link" href="{{route('karyawanLaporan')}}">
-        <i class="fas fa-book-reader"></i>
-        <span>Laporan Kinerja Karyawan</span></a>
+        <span>Karyawan</span>
+      </a>
+      <div id="collapseTwo" class="collapse {{ Request::is('karyawan*')  ? 'show' : ''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item {{ request()->routeIs('karyawanIndex*') ? 'active' : ''}}" href="{{route('karyawanIndex')}}">Data Karyawan</a>
+          <a class="collapse-item {{ Route::is('karyawanAbsensi*') ? 'active' : ''}}" href="{{route('karyawanAbsensi')}}">Absen Karyawan</a>
+          <a class="collapse-item {{ request()->routeIs('absensiIndex*') ? 'active' : ''}}" href="{{route('absensiIndex')}}">Data Absen Karyawan</a>
+          {{-- <a class="collapse-item {{ Route::is('karyawanLaporan*')  ? 'active' : ''}}" href="{{route('karyawanLaporan')}}">Laporan Kinerja </a> --}}
+          <a class="collapse-item {{ request()->routeIs('karyawanLaporan*')  ? 'active' : ''}}" href="{{route('karyawanLaporan')}}">Laporan Kinerja </a>
+        </div>
+      </div>
     </li>
 
     <!-- Divider -->
