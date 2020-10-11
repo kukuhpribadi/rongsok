@@ -123,7 +123,10 @@ $(document).ready(function(){
       if (result.value) {
           $.ajax({
               url: url, 
-              method: "GET", 
+              method: "DELETE", 
+              data: {
+                '_token': '{{ csrf_token() }}',
+              },
               success: function(response) {
                 //   $('#dataTable').DataTable().ajax.reload();
                   location.reload();
