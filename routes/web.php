@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/karyawan/absensi/data', 'KaryawanController@absensiData')->name('absensiData');
     Route::get('/karyawan/absensi/edit/{tanggal}', 'KaryawanController@absensiEdit')->name('absensiEdit');
     Route::post('/karyawan/absensi/update/{tanggal}', 'KaryawanController@absensiUpdate')->name('absensiUpdate');
-    Route::get('/karyawan/absensi/absensi/{tanggal}', 'KaryawanController@absensiDelete')->name('absensiDelete');
+    Route::delete('/karyawan/absensi/absensi/{tanggal}', 'KaryawanController@absensiDelete')->name('absensiDelete');
     Route::get('/karyawan/laporan', 'KaryawanController@karyawanLaporan')->name('karyawanLaporan');
     Route::post('/karyawan/laporan', 'KaryawanController@karyawanLaporanStore')->name('karyawanLaporanStore');
     Route::get('/karyawan/laporan/{id}', 'KaryawanController@karyawanLaporanDetail')->name('karyawanLaporanDetail');
