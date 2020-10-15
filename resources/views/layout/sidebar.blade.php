@@ -72,13 +72,29 @@
         <a class="collapse-item {{ request()->routeIs('karyawanIndex*') ? 'active' : ''}}" href="{{route('karyawanIndex')}}">Data Karyawan</a>
         <a class="collapse-item {{ Route::is('karyawanAbsensi*') ? 'active' : ''}}" href="{{route('karyawanAbsensi')}}">Absen Karyawan</a>
         <a class="collapse-item {{ request()->routeIs('absensiIndex*') ? 'active' : ''}}" href="{{route('absensiIndex')}}">Data Absen Karyawan</a>
-        {{-- <a class="collapse-item {{ Route::is('karyawanLaporan*')  ? 'active' : ''}}" href="{{route('karyawanLaporan')}}">Laporan Kinerja </a> --}}
         <a class="collapse-item {{ request()->routeIs('karyawanLaporan*')  ? 'active' : ''}}" href="{{route('karyawanLaporan')}}">Laporan Kinerja </a>
       </div>
     </div>
   </li>
   <!-- Divider -->
   <hr class="sidebar-divider">
+
+  <!-- Heading -->
+  <div class="sidebar-heading">
+    Beban Usaha
+  </div>
+
+  <li class="nav-item">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+      <i class="fas fa-file-invoice-dollar"></i>
+      <span>Beban Usaha</span>
+    </a>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="{{route('bebanIndex')}}">Set Beban Usaha</a>
+      </div>
+    </div>
+  </li>
 
   <!-- Sidebar Toggler (Sidebar) -->
   <div class="text-center d-none d-md-inline">

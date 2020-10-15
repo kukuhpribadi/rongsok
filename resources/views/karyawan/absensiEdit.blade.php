@@ -11,12 +11,12 @@
             {{-- body --}}
             <div class="card-body">
                 <form action="{{route('absensiUpdate', $tanggal)}}" method="post" id="formEdit">
-                @csrf
+                    @csrf
                     <div class="row">
                         <div class="form-group col-3">
                             <label for="datetimepicker4">Pilih Tanggal</label>
                             <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                                <input type="text" name="tanggal_absen" class="form-control datetimepicker-input" data-target="#datetimepicker4" value="{{$tanggalEdit}}"/>
+                                <input type="text" name="tanggal_absen" class="form-control datetimepicker-input" data-target="#datetimepicker4" value="{{$tanggalEdit}}" />
                                 <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -40,9 +40,9 @@
                             <td>{{$dt->karyawan->roleKaryawan()}}</td>
                             <td>
                                 <select class="form-control" name="absensi[]">
-                                  <option value="1" {{$dt->absensi == 1 ? 'selected' : ''}}>HADIR</option>
-                                  <option value="2" {{$dt->absensi == 2 ? 'selected' : ''}}>TDK HADIR</option>
-                                  <option value="3" {{$dt->absensi == 3 ? 'selected' : ''}}>LIBUR</option>
+                                    <option value="1" {{$dt->absensi == 1 ? 'selected' : ''}}>HADIR</option>
+                                    <option value="2" {{$dt->absensi == 2 ? 'selected' : ''}}>TDK HADIR</option>
+                                    <option value="3" {{$dt->absensi == 3 ? 'selected' : ''}}>LIBUR</option>
                                 </select>
                             </td>
                             <td>
@@ -62,36 +62,36 @@
 
 @section('script')
 <script>
-$(document).ready(function(){
-    $('#datetimepicker4').datetimepicker({
-        format: 'L',
-        locale: 'id',
-        defaultDate: new Date(),
+    $(document).ready(function() {
+        $('#datetimepicker4').datetimepicker({
+            format: 'L',
+            locale: 'id',
+            defaultDate: new Date(),
+        });
+
+        $('#updateData').on('click', function(e) {
+            e.preventDefault();
+            let data = $('#formEdit').serialize();
+            $.ajax({
+                url: "{{route('absensiUpdate', $tanggal)}}",
+                method: 'post',
+                data: data,
+                success: function(res) {
+                    Swal.fire('Sukses!', 'Absensi berhasil ditambahkan', 'success');
+                    location.replace("{{route('absensiIndex')}}");
+                },
+                error: function(data) {
+                    let pesan = data.responseJSON.message;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: pesan,
+                    })
+                }
+            })
+
+        });
+
     });
-
-    $('#updateData').on('click', function (e){
-        e.preventDefault();
-        let data = $('#formEdit').serialize();
-        $.ajax({
-            url: "{{route('absensiUpdate', $tanggal)}}",
-            method: 'post',
-            data: data,
-            success: function(res) {
-                Swal.fire('Sukses!','Absensi berhasil ditambahkan','success');
-                location.replace("{{route('absensiIndex')}}");
-            },
-            error: function(data) {
-                let pesan = data.responseJSON.message;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: pesan,
-                })
-            }
-        })
-
-    });
-
-});
-</script>    
+</script>
 @endsection

@@ -120,6 +120,8 @@ class DashboardController extends Controller
             });
         }
 
+        // $jmlHari = json_encode($jmlHari);
+
         // harga beli barang
         $hargaBeli = Barang::orderBy('harga', 'desc')->get();
 

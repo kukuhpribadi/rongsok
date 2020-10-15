@@ -4,147 +4,149 @@
 
 <div class="row">
 
-    <!-- Area Chart -->
-    <div class="col">
-      <div class="card shadow mb-4">
-        {{-- header --}}
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Daftar Penjualan</h6>
-        </div>
-        {{-- body --}}
-        <div class="card-body">
-            <div class="row">
-              <div class="col">
-                  <table class="table table-bordered table-striped" id="dataTable">
-                      <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>ID Transaksi</th>
-                            <th>Jenis Barang</th>
-                            <th>Harga</th>
-                            <th>Qty</th>
-                            <th>Total</th>
-                            <th>Tanggal</th>
-                            <th>Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+  <!-- Area Chart -->
+  <div class="col">
+    <div class="card shadow mb-4">
+      {{-- header --}}
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar Penjualan</h6>
+      </div>
+      {{-- body --}}
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <table class="table table-bordered table-striped" id="dataTable">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>ID Transaksi</th>
+                  <th>Jenis Barang</th>
+                  <th>Harga</th>
+                  <th>Qty</th>
+                  <th>Total</th>
+                  <th>Tanggal</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
 
-                      </tbody>
-                      <tfoot>
+              </tbody>
+              <tfoot>
 
-                      </tfoot>
-                  </table>
-              </div>
-            </div>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
 
 
 
 {{-- modal edit--}}
 <div class="modal fade" tabindex="-1" role="dialog" id="modalEdit">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Edit Jenis Barang</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form action="#" method="post" id="formEdit">
-            @csrf
-            <input type="hidden" name="id" id="idEdit">
-            <div class="form-group">
-              <label>ID Transaksi</label>
-              <input type="text" class="form-control" name="transaksi_jual_id" id="transaksiIdEdit" autocomplete="off" readonly>
-            </div>
-            <div class="form-group">
-              <label>Jenis barang</label>
-              <select class="form-control select2 formTransaksiSelect" id="idSelect" name="nama" >
-                @foreach ($barang as $item)
-                <option value="{{$item->id}}">{{$item->nama}}</option>
-                @endforeach 
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Harga</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    Rp
-                  </div>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Jenis Barang</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" id="formEdit">
+          @csrf
+          <input type="hidden" name="id" id="idEdit">
+          <div class="form-group">
+            <label>ID Transaksi</label>
+            <input type="text" class="form-control" name="transaksi_jual_id" id="transaksiIdEdit" autocomplete="off" readonly>
+          </div>
+          <div class="form-group">
+            <label>Jenis barang</label>
+            <select class="form-control select2 formTransaksiSelect" id="idSelect" name="nama">
+              @foreach ($barang as $item)
+              <option value="{{$item->id}}">{{$item->nama}}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Harga</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  Rp
                 </div>
-                <input type="text" class="form-control" name="harga" id="hargaEdit" data-a-dec="," data-a-sep="." autocomplete="off">
               </div>
-            </div>
-            <div class="form-group">
-                <label>Qty</label>
-                <input type="text" class="form-control" name="qty" id="qtyEdit" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <label>Keterangan</label>
-                <input type="text" class="form-control" name="keterangan" id="keteranganEdit" autocomplete="off">
+              <input type="text" class="form-control" name="harga" id="hargaEdit" data-a-dec="," data-a-sep="." autocomplete="off">
             </div>
           </div>
-          <div class="modal-footer bg-whitesmoke br">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="buttonUpdate">Update data</button>
-          </form>
-        </div>
+          <div class="form-group">
+            <label>Qty</label>
+            <input type="text" class="form-control" name="qty" id="qtyEdit" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Keterangan</label>
+            <input type="text" class="form-control" name="keterangan" id="keteranganEdit" autocomplete="off">
+          </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="buttonUpdate">Update data</button>
+        </form>
       </div>
     </div>
   </div>
+</div>
 @endsection
 
 @section('script')
 <script>
-$(document).ready(function(){
-  // datatable
-  $('#dataTable').DataTable({
-    responsive: true,
-    serverSide: false,
-    ajax: '{{route('dataTransaksiJual')}}',
-    columns: [{
-            data: 'DT_RowIndex', 
-            name: 'id'
-        }, {
-            data: 'transaksi_jual_id', 
-            name: 'transaksi_jual_id'
-        }, {
-            data: 'jenis_barang', 
-            name: 'jenis_barang'
-        }, {
-            data: 'harga', 
-            name: 'harga'
-        }, {
-            data: 'qty', 
-            name: 'qty'
-        }, {
-            data: 'total', 
-            name: 'total'
-        }, {
-            data: 'tanggal', 
-            name: 'tanggal'
-        }, {
-            data: 'aksi', 
-            name: 'aksi'
-        }]
-  });
+  $(document).ready(function() {
+    // datatable
+    $('#dataTable').DataTable({
+      responsive: true,
+      serverSide: false,
+      ajax: "{{route('dataTransaksiJual')}}",
+      columns: [{
+        data: 'DT_RowIndex',
+        name: 'id'
+      }, {
+        data: 'transaksi_jual_id',
+        name: 'transaksi_jual_id'
+      }, {
+        data: 'jenis_barang',
+        name: 'jenis_barang'
+      }, {
+        data: 'harga',
+        name: 'harga'
+      }, {
+        data: 'qty',
+        name: 'qty'
+      }, {
+        data: 'total',
+        name: 'total'
+      }, {
+        data: 'tanggal',
+        name: 'tanggal'
+      }, {
+        data: 'aksi',
+        name: 'aksi'
+      }]
+    });
 
-  // reset form saat modal close
-  $('.modal').on('hidden.bs.modal', function(){
+    // reset form saat modal close
+    $('.modal').on('hidden.bs.modal', function() {
       $(this).find('form')[0].reset();
-  });
+    });
 
- // autoNumeric pada form harga
- $('#harga, #hargaEdit').autoNumeric('init', {mDec: '0'});
+    // autoNumeric pada form harga
+    $('#harga, #hargaEdit').autoNumeric('init', {
+      mDec: '0'
+    });
 
-  // edit data transaksi
-  $('#modalEdit').on('show.bs.modal', function(event) {
+    // edit data transaksi
+    $('#modalEdit').on('show.bs.modal', function(event) {
       let button = $(event.relatedTarget);
       let id = button.data('id');
       let transaksiId = button.data('transaksi_jual_id');
@@ -159,93 +161,93 @@ $(document).ready(function(){
       modal.find('.modal-body #qtyEdit').val(qty);
       modal.find('.modal-body #keteranganEdit').val(keterangan);
       modal.find('.modal-body #idSelect option').each((i, data) => {
-        if(data.value == barang_id) {
-          $(data).attr('selected','selected');
-        } 
+        if (data.value == barang_id) {
+          $(data).attr('selected', 'selected');
+        }
       });
       //select2
-    $('.formTransaksiSelect').select2({
+      $('.formTransaksiSelect').select2({
         placeholder: 'Pilih jenis barang',
         allowClear: true,
-    }); 
-  });
+      });
+    });
 
-  // update data ajax
-  $('#buttonUpdate').click(function(e) {
-    e.preventDefault();
-    let form = $('#formEdit');
-    let data = form.serialize();
-    
-    $.ajax({
+    // update data ajax
+    $('#buttonUpdate').click(function(e) {
+      e.preventDefault();
+      let form = $('#formEdit');
+      let data = form.serialize();
+
+      $.ajax({
         url: "{{route('transaksiJualUpdate')}}",
         method: 'post',
         data: data,
         success: function(res) {
-            form.trigger('reset');
-            $('#modalEdit').modal('hide');
-            $('#dataTable').DataTable().ajax.reload();
-            Swal.fire('Sukses!','Data barang berhasil diubah','success');
+          form.trigger('reset');
+          $('#modalEdit').modal('hide');
+          $('#dataTable').DataTable().ajax.reload();
+          Swal.fire('Sukses!', 'Data barang berhasil diubah', 'success');
         },
         error: function(data) {
-            let res = data.responseJSON;
-            // if ($.isEmptyObject(res) == false) {
-            //     $.each(res.errors, function(key, value) {
-            //         $('input[name ="'+ key +'"]')
-            //             .closest('.form-group')
-            //             .append('<span class="help-block text-danger">' + value + '</span>');
-            //         $('input[name ="'+ key +'"]').addClass('is-invalid');
-            //     })
-            // }
+          let res = data.responseJSON;
+          // if ($.isEmptyObject(res) == false) {
+          //     $.each(res.errors, function(key, value) {
+          //         $('input[name ="'+ key +'"]')
+          //             .closest('.form-group')
+          //             .append('<span class="help-block text-danger">' + value + '</span>');
+          //         $('input[name ="'+ key +'"]').addClass('is-invalid');
+          //     })
+          // }
         }
-    })
-  });
-   
+      })
+    });
 
-  //delete data ajax
-  $('#dataTable').on('click', '#buttonDelete',function(e) {
-    e.preventDefault();
 
-    let url = $(this).attr('href');
-    let nama = $(this).attr("data-nama");
-    let idTransaksi = $(this).attr("data-idTransaksi");
+    //delete data ajax
+    $('#dataTable').on('click', '#buttonDelete', function(e) {
+      e.preventDefault();
 
-    Swal.fire({
-        title: 'Yakin akan menghapus data?', 
-        text: `${idTransaksi} | ${nama}`, 
-        icon: 'warning', 
-        showCancelButton: true, 
-        confirmButtonColor: '#d33', 
-        cancelButtonColor: '#3085d6', 
-        confirmButtonText: 'Hapus!'
-    })
-    .then((result) => {
-      if (result.value) {
-          $.ajax({
-              url: url, 
-              method: "DELETE", 
+      let url = $(this).attr('href');
+      let nama = $(this).attr("data-nama");
+      let idTransaksi = $(this).attr("data-idTransaksi");
+
+      Swal.fire({
+          title: 'Yakin akan menghapus data?',
+          text: `${idTransaksi} | ${nama}`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Hapus!'
+        })
+        .then((result) => {
+          if (result.value) {
+            $.ajax({
+              url: url,
+              method: "DELETE",
               data: {
                 '_token': '{{ csrf_token() }}',
-              }, 
+              },
               success: function(response) {
-                  $('#dataTable').DataTable().ajax.reload();
-                  Swal.fire(
-                      'Deleted!', 
-                      'Your file has been deleted.', 
-                      'success'
-                  )
-              }, 
+                $('#dataTable').DataTable().ajax.reload();
+                Swal.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                )
+              },
               error: function(xhr) {
-                  Swal.fire({
-                      type: 'error', 
-                      title: 'Oops...', 
-                      text: 'Something went wrong!'
-                  });
-                }
+                Swal.fire({
+                  type: 'error',
+                  title: 'Oops...',
+                  text: 'Something went wrong!'
+                });
+              }
             });
-      }
-    })
-  });
+          }
+        })
+    });
 
-});
+  });
 </script>
 @endsection
