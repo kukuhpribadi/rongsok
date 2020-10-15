@@ -59,4 +59,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/karyawan/laporan/update/{id}', 'KaryawanController@karyawanLaporanUpdate')->name('karyawanLaporanUpdate');
 
     Route::get('/beban-usaha', 'BebanController@index')->name('bebanIndex');
+    Route::get('/beban-usaha/data', 'BebanController@bebanData')->name('bebanData');
+    Route::post('/beban-usaha', 'BebanController@store')->name('bebanStore');
+    Route::post('/beban-usaha/update', 'BebanController@update')->name('bebanUpdate');
+    Route::delete('/beban-usaha/delete/{id}', 'BebanController@delete')->name('bebanDelete');
 });

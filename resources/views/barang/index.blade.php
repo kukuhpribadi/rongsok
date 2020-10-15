@@ -143,6 +143,38 @@
       mDec: '0'
     });
 
+    //post modal
+    $('#buttonSimpan').click(function(e) {
+      e.preventDefault();
+      let form = $('#formTambah');
+      let data = form.serialize();
+      form.find('.help-block').remove();
+      form.find('.is-invalid').removeClass('is-invalid');
+
+      $.ajax({
+        url: "{{route('barangStore')}}",
+        method: 'post',
+        data: data,
+        success: function(res) {
+          form.trigger('reset');
+          $('#modalTambah').modal('hide');
+          $('#dataTable').DataTable().ajax.reload();
+          Swal.fire('Sukses!', 'Beban usaha berhasil ditambahkan', 'success');
+        },
+        error: function(data) {
+          let res = data.responseJSON;
+          if ($.isEmptyObject(res) == false) {
+            $.each(res.errors, function(key, value) {
+              $('#' + key)
+                .closest('.form-group')
+                .append('<span class="help-block text-danger">' + value + '</span>');
+              $('#' + key).addClass('is-invalid');
+            })
+          }
+        }
+      })
+    });
+
     // edit modal
     $('#modalEdit').on('show.bs.modal', function(event) {
       let button = $(event.relatedTarget)
@@ -173,14 +205,6 @@
         },
         error: function(data) {
           let res = data.responseJSON;
-          // if ($.isEmptyObject(res) == false) {
-          //     $.each(res.errors, function(key, value) {
-          //         $('input[name ="'+ key +'"]')
-          //             .closest('.form-group')
-          //             .append('<span class="help-block text-danger">' + value + '</span>');
-          //         $('input[name ="'+ key +'"]').addClass('is-invalid');
-          //     })
-          // }
         }
       })
     });
