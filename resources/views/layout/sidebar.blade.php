@@ -85,13 +85,14 @@
   </div>
 
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+    <a class="nav-link {{ Request::is('beban-usaha*')  ? '' : 'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
       <i class="fas fa-file-invoice-dollar"></i>
       <span>Beban Usaha</span>
     </a>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+    <div id="collapseThree" class="collapse {{ Request::is('beban-usaha*')  ? 'show' : ''}}" aria-labelledby="headingThree" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{route('bebanIndex')}}">Set Beban Usaha</a>
+        <a class="collapse-item {{ request()->routeIs('bebanBayar') ? 'active' : ''}}" href="{{route('bebanBayar')}}">Bayar</a>
+        <a class="collapse-item {{ request()->routeIs('bebanIndex') ? 'active' : ''}}" href="{{route('bebanIndex')}}">Set Beban Usaha</a>
       </div>
     </div>
   </li>

@@ -63,4 +63,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/beban-usaha', 'BebanController@store')->name('bebanStore');
     Route::post('/beban-usaha/update', 'BebanController@update')->name('bebanUpdate');
     Route::delete('/beban-usaha/delete/{id}', 'BebanController@delete')->name('bebanDelete');
+
+    Route::get('/beban-usaha/bayar', 'TransaksiBebanController@bebanBayar')->name('bebanBayar');
+    Route::get('/beban-usaha/bayar/data', 'TransaksiBebanController@bebanBayarData')->name('bebanBayarData');
+    Route::post('/beban-usaha/bayar', 'TransaksiBebanController@bebanBayarStore')->name('bebanBayarStore');
+    Route::post('/beban-usaha/bayar/update', 'TransaksiBebanController@bebanBayarUpdate')->name('bebanBayarUpdate');
+    Route::delete('/beban-usaha/bayar/delete/{id}', 'TransaksiBebanController@bebanBayarDelete')->name('bebanBayarDelete');
 });
