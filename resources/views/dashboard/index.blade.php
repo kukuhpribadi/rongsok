@@ -176,7 +176,7 @@
     data: {
       labels: <?= request()->routeIs('getDataTahunIni') ? json_encode($jmlBulan) : json_encode($jmlHari) ?>,
       datasets: [{
-        label: 'Pembelian',
+        label: 'Pengeluaran',
         data: <?= request()->routeIs('getDataTahunIni') ? json_encode($jmlTransaksiBeliPerBulan) : json_encode($jmlTransaksiBeliPerHari) ?>,
         lineTension: 0.3,
         backgroundColor: "rgba(78, 115, 223, 0.2)",
@@ -190,7 +190,7 @@
         pointHitRadius: 10,
         pointBorderWidth: 2,
       }, {
-        label: 'Penjualan',
+        label: 'Pendapatan',
         data: <?= request()->routeIs('getDataTahunIni') ? json_encode($jmlTransaksiJualPerBulan) : json_encode($jmlTransaksiJualPerHari) ?>,
         lineTension: 0.3,
         backgroundColor: "rgba(235, 64, 52, 0.2)",

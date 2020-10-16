@@ -10,6 +10,7 @@ use App\TransaksiJual;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Charts\DashboardChart;
+use App\TransaksiBeban;
 
 class DashboardController extends Controller
 {
@@ -26,7 +27,13 @@ class DashboardController extends Controller
         $pengeluaran = $pengeluaran->sum(function ($row) {
             return $row->harga * $row->qty;
         });
-        $pengeluaran = number_format($pengeluaran + $upahKaryawan, 0, ',', '.');
+
+        // beban usaha
+        $bebanUsaha = TransaksiBeban::whereYear('tanggal_pembayaran', $now->year)->get();
+        $bebanUsaha =  $bebanUsaha->sum('harga');
+
+        // pengeluaran per tahun
+        $pengeluaran = number_format($pengeluaran + $upahKaryawan + $bebanUsaha, 0, ',', '.');
 
         // pendapatan
         $pendapatan = TransaksiJual::whereYear('created_at', $now->year)->get();
@@ -55,9 +62,10 @@ class DashboardController extends Controller
             // pengeluaran atau pembelian
             $transaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->get();
             $pengeluaranUpah = LaporanKaryawan::whereYear('updated_at', $now->year)->whereMonth('updated_at', $i)->get();
+            $pengeluaranBeban = TransaksiBeban::whereYear('tanggal_pembayaran', $now->year)->whereMonth('tanggal_pembayaran', $i)->get();
             $jmlTransaksiBeliPerBulan[] = $transaksiBeli->sum(function ($row) {
                 return $row->harga * $row->qty;
-            }) + $pengeluaranUpah->sum('total');
+            }) + $pengeluaranUpah->sum('total') + $pengeluaranBeban->sum('harga');
 
             //penjualan atau pendapatan
             $transaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->get();
@@ -83,7 +91,13 @@ class DashboardController extends Controller
         $pengeluaran = $pengeluaran->sum(function ($row) {
             return $row->harga * $row->qty;
         });
-        $pengeluaran = number_format($pengeluaran + $upahKaryawan, 0, ',', '.');
+
+        // beban usaha
+        $bebanUsaha = TransaksiBeban::whereYear('tanggal_pembayaran', $now->year)->whereMonth('tanggal_pembayaran', $now->month)->get();
+        $bebanUsaha =  $bebanUsaha->sum('harga');
+
+        // pengeluaran perbulan
+        $pengeluaran = number_format($pengeluaran + $upahKaryawan + $bebanUsaha, 0, ',', '.');
 
         // pendapatan
         $pendapatan = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->get();
@@ -109,9 +123,10 @@ class DashboardController extends Controller
             // pengeluaran atau pembelian
             $transaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->get();
             $pengeluaranUpah = LaporanKaryawan::whereYear('updated_at', $now->year)->whereMonth('updated_at', $now->month)->whereDay('updated_at', $i)->get();
+            $pengeluaranBeban = TransaksiBeban::whereYear('tanggal_pembayaran', $now->year)->whereMonth('tanggal_pembayaran', $now->month)->whereDay('tanggal_pembayaran', $i)->get();
             $jmlTransaksiBeliPerHari[] = $transaksiBeli->sum(function ($row) {
                 return $row->harga * $row->qty;
-            }) + $pengeluaranUpah->sum('total');
+            }) + $pengeluaranUpah->sum('total') + $pengeluaranBeban->sum('harga');
 
             //penjualan atau pendapatan
             $transaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->get();
