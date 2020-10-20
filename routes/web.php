@@ -69,4 +69,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/beban-usaha/bayar', 'TransaksiBebanController@bebanBayarStore')->name('bebanBayarStore');
     Route::post('/beban-usaha/bayar/update', 'TransaksiBebanController@bebanBayarUpdate')->name('bebanBayarUpdate');
     Route::delete('/beban-usaha/bayar/delete/{id}', 'TransaksiBebanController@bebanBayarDelete')->name('bebanBayarDelete');
+
+    // Backup & Printout
+    Route::get('/tool/backup', 'ToolController@backup')->name('backup');
+    Route::get('/tool/export', 'ToolController@exportIndex')->name('exportIndex');
+    Route::get('/tool/export/data', 'ToolController@exportData')->name('exportData');
+    Route::post('/tool/export', 'ToolController@exportStore')->name('exportStore');
+    Route::delete('/tool/export/delete/{id}', 'ToolController@exportDelete')->name('exportDelete');
+    Route::get('/tool/export/download/{id}', 'ToolController@exportDownload')->name('exportDownload');
+
+
+    Route::get('/tool/export/penjualan', 'ToolController@exportPenjualan')->name('exportPenjualan');
 });

@@ -97,6 +97,27 @@
     </div>
   </li>
 
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+
+  <!-- Heading -->
+  <div class="sidebar-heading">
+    Tool
+  </div>
+
+  <li class="nav-item">
+    <a class="nav-link {{ Request::is('tool*')  ? '' : 'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+      <i class="fas fa-print"></i>
+      <span>Export & Backup</span>
+    </a>
+    <div id="collapseFour" class="collapse {{ Request::is('tool*')  ? 'show' : ''}}" aria-labelledby="headingFour" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item {{ request()->routeIs('exportIndex') ? 'active' : ''}}" href="{{ route('exportIndex')}}">Export Laporan</a>
+        <a class="collapse-item {{ request()->routeIs('backup') ? 'active' : ''}}" href="{{ route('backup')}}">Backup database</a>
+      </div>
+    </div>
+  </li>
+
   <!-- Sidebar Toggler (Sidebar) -->
   <div class="text-center d-none d-md-inline">
     <button class="rounded-circle border-0" id="sidebarToggle"></button>

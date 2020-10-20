@@ -1,40 +1,24 @@
 @extends('layout.master')
-@section('title', 'Laporan Kinerja Karyawan')
+@section('title', 'Export Laporan')
 @section('content')
 <div class="row">
-    <!-- Area Chart -->
     <div class="col">
         <div class="card shadow mb-4">
-            {{-- header --}}
-            <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Laporan Kinerja Karyawan</h6>
-                <button class="btn btn-primary btn-sm" id="modal-2" data-toggle="modal" data-target="#modalTambah"><i class="far fa-plus-square"></i> Buat laporan</button>
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Export laporan to Excel</h6>
+                <button class="btn btn-primary btn-sm" id="modal-2" data-toggle="modal" data-target="#modalTambah"><i class="far fa-plus-square"></i> Export laporan</button>
             </div>
-            <!-- Card Body -->
             <div class="card-body">
                 <table class="table table-bordered table-striped" id="dataTable">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th>No.</th>
                             <th>Tanggal</th>
-                            <th>Status pembayaran</th>
-                            <th>Total</th>
+                            <th>Jenis</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($laporan as $lprn)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$lprn->range}}</td>
-                            <td>{!!$lprn->status == 1 ? '<span class="badge badge-success">Success</span>' : '<span class="badge badge-warning">Pending</span>'!!}</td>
-                            <td>Rp. {{number_format($lprn->total, 0, ',', '.')}}</td>
-                            <td>
-                                <a href="{{route('karyawanLaporanDetail', $lprn->id)}}" class="btn btn-sm btn-icon btn-success"><i class="far fa-eye"></i></a>
-                                <a href="{{route('karyawanLaporanDelete', $lprn->id)}}" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-range="{{$lprn->range}}"><i class="far fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
-                        @endforeach
                     </tbody>
                     <tfoot>
                     </tfoot>
@@ -49,13 +33,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Buat laporan kinerja</h5>
+                <h5 class="modal-title">Export laporan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form action="{{route('karyawanLaporanStore')}}" method="post" id="formTambah">
+            <form action="{{route('exportStore')}}" method="post" id="formTambah">
+                <div class="modal-body">
                     @csrf
                     <div class="row">
                         <div class="col">
@@ -81,12 +65,20 @@
                             </div>
                         </div>
                     </div>
-            </div>
-            <div class="modal-footer bg-whitesmoke br">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="buttonSimpan">Simpan data</button>
-                </form>
-            </div>
+                    <div class="form-group">
+                        <label>Jenis Laporan</label>
+                        <select class="form-control select2 formTransaksiSelect" id="idSelect" name="jenis_laporan">
+                            <option value=""></option>
+                            <option value="Pembelian">Pembelian</option>
+                            <option value="Penjualan">Penjualan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="buttonSimpan">Export</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -95,12 +87,82 @@
 @section('script')
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable({});
+        // datatable
+        $('#dataTable').DataTable({
+            responsive: true,
+            serverSide: false,
+            ajax: "{{route('exportData')}}",
+            columns: [{
+                data: 'DT_RowIndex',
+                name: 'id'
+            }, {
+                data: 'range',
+                name: 'range'
+            }, {
+                data: 'jenis_laporan',
+                name: 'jenis_laporan'
+            }, {
+                data: 'aksi',
+                name: 'aksi'
+            }]
+        });
 
-        $('#datetimepicker4start, #datetimepicker4end').datetimepicker({
+        // tanggal
+        $('.date').datetimepicker({
             format: 'L',
             locale: 'id',
             defaultDate: new Date(),
+        });
+
+        let tanggal = $('.datetimepicker-input').val();
+
+        //select2
+        $('.formTransaksiSelect').select2({
+            placeholder: 'Pilih beban',
+            allowClear: true,
+        });
+
+        // reset form saat modal close
+        $('.modal').on('hidden.bs.modal', function() {
+            $(this).find('form')[0].reset();
+            $(this).find('.formTransaksiSelect').trigger('change.select2');
+            $(this).find('.help-block').remove();
+            $(this).find('.is-invalid').removeClass('is-invalid');
+
+            // tanggal
+            $('.datetimepicker-input').val(tanggal);
+        });
+
+        //post modal
+        $('#buttonSimpan').click(function(e) {
+            e.preventDefault();
+            let form = $('#formTambah');
+            let data = form.serialize();
+            form.find('.help-block').remove();
+            form.find('.is-invalid').removeClass('is-invalid');
+
+            $.ajax({
+                url: "{{route('exportStore')}}",
+                method: 'post',
+                data: data,
+                success: function(res) {
+                    form.trigger('reset');
+                    $('#modalTambah').modal('hide');
+                    $('#dataTable').DataTable().ajax.reload();
+                    Swal.fire('Sukses!', 'Export laporan ditambahkan', 'success');
+                },
+                error: function(data) {
+                    let res = data.responseJSON;
+                    if ($.isEmptyObject(res) == false) {
+                        $.each(res.errors, function(key, value) {
+                            $('#' + key)
+                                .closest('.form-group')
+                                .append('<span class="help-block text-danger">' + value + '</span>');
+                            $('#' + key).addClass('is-invalid');
+                        })
+                    }
+                }
+            })
         });
 
         //delete data ajax
@@ -108,11 +170,12 @@
             e.preventDefault();
 
             let url = $(this).attr('href');
-            let range = $(this).attr("data-range");
+            let jenis = $(this).attr("data-jenis_laporan");
+            let tanggal = $(this).attr("data-range");
 
             Swal.fire({
                     title: 'Yakin akan menghapus data?',
-                    text: `${range}`,
+                    text: `${jenis} tanggal ${tanggal}`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -128,8 +191,7 @@
                                 '_token': '{{ csrf_token() }}',
                             },
                             success: function(response) {
-                                //   $('#dataTable').DataTable().ajax.reload();
-                                location.reload();
+                                $('#dataTable').DataTable().ajax.reload();
                                 Swal.fire(
                                     'Deleted!',
                                     'Your file has been deleted.',
@@ -147,7 +209,6 @@
                     }
                 })
         });
-
-    });
+    })
 </script>
 @endsection
