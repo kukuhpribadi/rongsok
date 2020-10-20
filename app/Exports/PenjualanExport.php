@@ -9,8 +9,12 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class PenjualanExport implements FromCollection, WithMapping, WithHeadings, WithStyles, ShouldAutoSize
+class PenjualanExport implements FromCollection, WithMapping, WithHeadings, WithStyles, ShouldAutoSize, WithEvents
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -37,15 +41,61 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('a1:h1')->getFont()->setBold(true);
-        $sheet->getStyle('a1:h1')->applyFromArray([
+        // last column as letter value (e.g., D)
+        $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]));
+        // calculate last row + 1 (total results + header rows + column headings row + new row)
+        $last_row = count($this->collection()->toArray()) + 1;
+
+        $panjang1 = 'a1:' . $last_column . '1';
+        $panjang2 = 'a1:' . $last_column . $last_row;
+
+        $sheet->getStyle($panjang1)->getFont()->setBold(true);
+        $sheet->getStyle($panjang2)->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
                 ],
             ],
         ]);
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            // Handle by a closure.
+            AfterSheet::class => function (AfterSheet $event) {
+
+                // last column as letter value (e.g., D)
+                $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]));
+
+                // calculate last row + 1 (total results + header rows + column headings row + new row)
+                $last_row = count($this->collection()->toArray()) + 2 + 3 + 1;
+
+                // set up a style array for cell formatting
+                $style_text_center = [
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER
+                    ]
+                ];
+
+                // at row 1, insert 2 rows
+                $event->sheet->insertNewRowBefore(1, 3);
+
+                // merge cells for full-width
+                $event->sheet->mergeCells(sprintf('A1:%s1', $last_column));
+                $event->sheet->mergeCells(sprintf('A2:%s2', $last_column));
+                $event->sheet->mergeCells(sprintf('A%d:%s%d', $last_row, $last_column, $last_row));
+
+                // assign cell values
+                $event->sheet->setCellValue('A1', 'Top Triggers Report');
+                $event->sheet->setCellValue('A2', 'SECURITY CLASSIFICATION - UNCLASSIFIED [Generator: Admin]');
+                $event->sheet->setCellValue(sprintf('A%d', $last_row), 'SECURITY CLASSIFICATION - UNCLASSIFIED [Generated: ...]');
+
+                // assign cell styles
+                $event->sheet->getStyle('A1:A2')->applyFromArray($style_text_center);
+                $event->sheet->getStyle(sprintf('A%d', $last_row))->applyFromArray($style_text_center);
+            },
+        ];
     }
 
     public function headings(): array
