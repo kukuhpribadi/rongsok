@@ -61,7 +61,7 @@
                     <td></td>
                     <td>Total</td>
                     <td>
-                      <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep=".">
+                      <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep="." readonly>
                     </td>
                   </tr>
                   <tr>

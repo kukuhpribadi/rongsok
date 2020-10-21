@@ -60,7 +60,7 @@
                     <td></td>
                     <td>Total</td>
                     <td>
-                      <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep=".">
+                      <input type="text" class="form-control" name="total" id="total" data-a-dec="," data-a-sep="." autocomplete="off" readonly>
                     </td>
                   </tr>
                   <tr>
@@ -141,6 +141,24 @@
       e.preventDefault();
       addRow();
     });
+
+    // shortcut keyboard
+    // $(window).keypress(function(event) {
+    //   if (event.code == 'NumpadEnter') {
+    //     $('form').submit();
+    //   } else if (event.code == 'NumpadAdd') {
+    //     addRow();
+    //   } else if (event.code == 'NumpadSubtract') {
+    //     if ($('.rowTransaksi').length > 1) {
+    //       $('.rowTransaksi').last().remove();
+    //     } else if ($('.rowTransaksi').length == 1) {
+    //       addRow();
+    //       $('.rowTransaksi').first().remove();
+    //     }
+
+    //     loopRow();
+    //   }
+    // });
 
     // input form per row
     $('table').on('change keyup', function(e) {

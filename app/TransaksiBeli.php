@@ -13,4 +13,14 @@ class TransaksiBeli extends Model
     {
         return $this->belongsTo(Barang::class);
     }
+
+    public function total()
+    {
+        return $this->harga * $this->qty;
+    }
+
+    public function formatTanggal()
+    {
+        return $this->created_at->format('d-m-Y');
+    }
 }

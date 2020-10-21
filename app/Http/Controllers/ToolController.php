@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ExportLaporan;
+use App\Exports\PembelianExport;
 use App\Exports\PenjualanExport;
 use Error;
 use Excel;
@@ -52,7 +53,11 @@ class ToolController extends Controller
     {
         $export = ExportLaporan::find($id);
         if ($export->jenis_laporan == 'Pembelian') {
-            return 'export pembelian';
+            try {
+                return Excel::download(new PembelianExport($export->range), 'Laporan-Pembelian-' . str_replace('/', '', $export->range) . '.xlsx');
+            } catch (Exception $exception) {
+                return redirect()->back()->with('gagal', 'Gagal export, data tidak tersedia');
+            }
         } elseif ($export->jenis_laporan == 'Penjualan') {
             try {
                 return Excel::download(new PenjualanExport($export->range), 'Laporan-Penjualan-' . str_replace('/', '', $export->range) . '.xlsx');
