@@ -143,6 +143,16 @@
   </script>
   @endif
 
+  @if(Session::has('gagal'))
+  <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: "{{ Session::get('gagal') }}",
+    });
+  </script>
+  @endif
+
   @yield('script')
 
 </body>

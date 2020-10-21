@@ -209,6 +209,26 @@
                     }
                 })
         });
+
+        // $('#dataTable').on('click', '#buttonDownload', function(e) {
+        //     e.preventDefault();
+        //     let id = $(this).attr("data-id");
+        //     let url = $(this).attr("href");
+        //     $.ajax({
+        //         url: url,
+        //         method: "get",
+        //         success: function(response) {
+        //             console.log(response)
+        //         },
+        //         error: function(xhr) {
+        //             Swal.fire({
+        //                 type: 'error',
+        //                 title: 'Oops...',
+        //                 text: 'Data kosong'
+        //             });
+        //         }
+        //     });
+        // });
     })
 </script>
 @endsection

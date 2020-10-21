@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\ExportLaporan;
 use App\Exports\PenjualanExport;
+use Error;
 use Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Exception;
 
 class ToolController extends Controller
 {
@@ -26,7 +28,7 @@ class ToolController extends Controller
         return DataTables::eloquent($export)
             ->addIndexColumn()
             ->addColumn('aksi', function ($ex) {
-                return '<a href="' . route('exportDownload', $ex->id) . '" class="btn btn-sm btn-icon btn-primary" id="downloadButton"><i class="fas fa-download"></i></a>
+                return '<a href="' . route('exportDownload', $ex->id) . '" data-id="' . $ex->id . '" class="btn btn-sm btn-icon btn-primary" id="buttonDownload"><i class="fas fa-download"></i></a>
                 <a href="' . route('exportDelete', $ex->id) . '" data-range="' . $ex->range . '" data-jenis_laporan="' . $ex->jenis_laporan . '" class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
             })
             ->rawColumns(['aksi'])
@@ -48,12 +50,11 @@ class ToolController extends Controller
         if ($export->jenis_laporan == 'Pembelian') {
             return 'export pembelian';
         } elseif ($export->jenis_laporan == 'Penjualan') {
-            return $this->exportPenjualan($export->range);
+            try {
+                return Excel::download(new PenjualanExport($export->range), 'Laporan-Penjualan-' . str_replace('/', '', $export->range) . '.xlsx');
+            } catch (Exception $exception) {
+                return redirect()->back()->with('gagal', 'data kosong');
+            }
         }
-    }
-
-    public function exportPenjualan($tanggal)
-    {
-        return Excel::download(new PenjualanExport($tanggal), 'Laporan-Penjualan-' . str_replace('/', '', $tanggal) . '.xlsx');
     }
 }

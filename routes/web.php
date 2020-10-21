@@ -77,7 +77,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/tool/export', 'ToolController@exportStore')->name('exportStore');
     Route::delete('/tool/export/delete/{id}', 'ToolController@exportDelete')->name('exportDelete');
     Route::get('/tool/export/download/{id}', 'ToolController@exportDownload')->name('exportDownload');
-
-
-    Route::get('/tool/export/penjualan', 'ToolController@exportPenjualan')->name('exportPenjualan');
 });
