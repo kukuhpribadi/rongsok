@@ -43,17 +43,21 @@ class ToolController extends Controller
         ]);
     }
 
+    public function exportDelete($id)
+    {
+        ExportLaporan::find($id)->delete();
+    }
+
     public function exportDownload($id)
     {
         $export = ExportLaporan::find($id);
-
         if ($export->jenis_laporan == 'Pembelian') {
             return 'export pembelian';
         } elseif ($export->jenis_laporan == 'Penjualan') {
             try {
                 return Excel::download(new PenjualanExport($export->range), 'Laporan-Penjualan-' . str_replace('/', '', $export->range) . '.xlsx');
             } catch (Exception $exception) {
-                return redirect()->back()->with('gagal', 'data kosong');
+                return redirect()->back()->with('gagal', 'Gagal export, data tidak tersedia');
             }
         }
     }

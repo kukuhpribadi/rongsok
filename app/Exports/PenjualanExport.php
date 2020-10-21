@@ -38,7 +38,7 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
         $tanggalEnd = explode('/', $getTanggal[1]);
         $tanggalEnd = $tanggalEnd[2] . '-' . $tanggalEnd[1] . '-' . $tanggalEnd[0];
 
-        return TransaksiJual::whereBetween('created_at', [$tanggalStart, $tanggalEnd])->get();
+        return TransaksiJual::whereBetween('created_at', [$tanggalStart, $tanggalEnd . " 23:59:59"])->get();
     }
 
     public function styles(Worksheet $sheet)
