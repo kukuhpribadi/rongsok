@@ -26,7 +26,7 @@ class ToolController extends Controller
         return DataTables::eloquent($export)
             ->addIndexColumn()
             ->addColumn('aksi', function ($ex) {
-                return '<a href="' . route('exportDownload', $ex->id) . '" class="btn btn-sm btn-icon btn-primary"><i class="fas fa-download"></i></a>
+                return '<a href="' . route('exportDownload', $ex->id) . '" class="btn btn-sm btn-icon btn-primary" id="downloadButton"><i class="fas fa-download"></i></a>
                 <a href="' . route('exportDelete', $ex->id) . '" data-range="' . $ex->range . '" data-jenis_laporan="' . $ex->jenis_laporan . '" class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
             })
             ->rawColumns(['aksi'])

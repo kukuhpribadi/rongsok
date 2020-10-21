@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\TransaksiJual;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -20,6 +21,7 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
      * @return \Illuminate\Support\Collection
      */
     private $index = 1;
+    private $grandTotal = [];
 
     public function __construct($tanggal)
     {
@@ -43,13 +45,14 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
     {
         // last column as letter value (e.g., D)
         $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]));
-        // calculate last row + 1 (total results + header rows + column headings row + new row)
-        $last_row = count($this->collection()->toArray()) + 1;
+
+        $last_row = count($this->collection()->toArray()) + 2;
 
         $panjang1 = 'a1:' . $last_column . '1';
         $panjang2 = 'a1:' . $last_column . $last_row;
 
         $sheet->getStyle($panjang1)->getFont()->setBold(true);
+        $sheet->getStyle($last_row)->getFont()->setBold(true);
         $sheet->getStyle($panjang2)->applyFromArray([
             'borders' => [
                 'allBorders' => [
@@ -68,8 +71,10 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
                 // last column as letter value (e.g., D)
                 $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]));
 
+                $total_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]) - 1);
+
                 // calculate last row + 1 (total results + header rows + column headings row + new row)
-                $last_row = count($this->collection()->toArray()) + 2 + 3 + 1;
+                $last_row = count($this->collection()->toArray()) + 2 + 3;
 
                 // set up a style array for cell formatting
                 $style_text_center = [
@@ -84,15 +89,17 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
                 // merge cells for full-width
                 $event->sheet->mergeCells(sprintf('A1:%s1', $last_column));
                 $event->sheet->mergeCells(sprintf('A2:%s2', $last_column));
-                $event->sheet->mergeCells(sprintf('A%d:%s%d', $last_row, $last_column, $last_row));
+                $event->sheet->mergeCells(sprintf('A%d:%s%d', $last_row, $total_column, $last_row));
 
                 // assign cell values
-                $event->sheet->setCellValue('A1', 'Top Triggers Report');
-                $event->sheet->setCellValue('A2', 'SECURITY CLASSIFICATION - UNCLASSIFIED [Generator: Admin]');
-                $event->sheet->setCellValue(sprintf('A%d', $last_row), 'SECURITY CLASSIFICATION - UNCLASSIFIED [Generated: ...]');
+                $event->sheet->setCellValue('A1', 'LAPORAN PENJUALAN');
+                $event->sheet->setCellValue('A2', $this->tanggal);
+                $event->sheet->setCellValue(sprintf('A%d', $last_row), 'Total');
+                $event->sheet->setCellValue($last_column . $last_row, "Rp " . number_format(array_sum($this->grandTotal), 0, ',', '.'));
 
                 // assign cell styles
                 $event->sheet->getStyle('A1:A2')->applyFromArray($style_text_center);
+                $event->sheet->getStyle('A1:A2')->getFont()->setBold(true);
                 $event->sheet->getStyle(sprintf('A%d', $last_row))->applyFromArray($style_text_center);
             },
         ];
@@ -114,6 +121,7 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
 
     public function map($data): array
     {
+        $this->grandTotal[] = $data->total();
         return [
             $this->index++,
             $data->transaksi_jual_id,
