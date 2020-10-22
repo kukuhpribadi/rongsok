@@ -224,6 +224,8 @@
             });
         }
 
+        inputFormChange();
+
         //post modal
         $('#buttonSimpan').click(function(e) {
             e.preventDefault();

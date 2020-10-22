@@ -36,7 +36,7 @@ class KaryawanController extends Controller
 
     public function dataKaryawan()
     {
-        $karyawan = Karyawan::query();
+        $karyawan = Karyawan::query()->orderBy('status', 'asc');
         return DataTables::eloquent($karyawan)
             ->addIndexColumn()
             ->addColumn('aksi', function ($kr) {
