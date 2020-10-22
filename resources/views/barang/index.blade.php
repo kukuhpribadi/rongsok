@@ -243,9 +243,9 @@
               },
               error: function(xhr) {
                 Swal.fire({
-                  type: 'error',
-                  title: 'Oops...',
-                  text: 'Something went wrong!'
+                  icon: 'error',
+                  title: 'Gagal menghapus data!',
+                  text: 'Data memiliki relasi dengan data lain'
                 });
               }
             });
