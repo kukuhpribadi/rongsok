@@ -36,8 +36,12 @@ class TransaksiJualController extends Controller
         $filter = array_filter($request->nama);
         $harga = str_replace('.', '', $request->harga);
 
+        $tanggalInput = explode('/', $request->tanggal_input);
+        $tanggalInput = $tanggalInput[2] . '-' . $tanggalInput[1] . '-' . $tanggalInput[0];
+
         foreach ($filter as $key => $value) {
             TransaksiJual::create([
+                'tanggal_input' => $tanggalInput,
                 'barang_id' => $request->nama[$key],
                 'transaksi_jual_id' => $request->transaksi_jual_id,
                 'harga' => $harga[$key],
@@ -74,7 +78,9 @@ class TransaksiJualController extends Controller
                 return "Rp " . number_format($h->harga, 0, ',', '.');
             })
             ->editColumn('tanggal', function ($tgl) {
-                return $tgl->created_at->format('d-m-Y');
+                $time = strtotime($tgl->tanggal_input);
+                $newformat = date('d-m-Y', $time);
+                return $newformat;
             })
             ->rawColumns(['aksi'])
             ->make(true);

@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $upahKaryawan = $upahKaryawan->sum('total');
 
         // pengeluaran
-        $pengeluaran = TransaksiBeli::whereYear('created_at', $now->year)->get();
+        $pengeluaran = TransaksiBeli::whereYear('tanggal_input', $now->year)->get();
         $pengeluaran = $pengeluaran->sum(function ($row) {
             return $row->harga * $row->qty;
         });
@@ -36,15 +36,15 @@ class DashboardController extends Controller
         $pengeluaran = number_format($pengeluaran + $upahKaryawan + $bebanUsaha, 0, ',', '.');
 
         // pendapatan
-        $pendapatan = TransaksiJual::whereYear('created_at', $now->year)->get();
+        $pendapatan = TransaksiJual::whereYear('tanggal_input', $now->year)->get();
         $pendapatan = $pendapatan->sum(function ($row) {
             return $row->harga * $row->qty;
         });
         $pendapatan = number_format($pendapatan, 0, ',', '.');
 
         // jml transaksi
-        $jmlTransaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->groupBy('transaksi_beli_id')->get()->count();
-        $jmlTransaksiJual = TransaksiJual::whereYear('created_at', $now->year)->groupBy('transaksi_jual_id')->get()->count();
+        $jmlTransaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->groupBy('transaksi_beli_id')->get()->count();
+        $jmlTransaksiJual = TransaksiJual::whereYear('tanggal_input', $now->year)->groupBy('transaksi_jual_id')->get()->count();
 
         //jml karyawan
         $jmlKaryawan = Karyawan::where('status', 1)->get()->count();
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             $jmlBulan[] = $i;
 
             // pengeluaran atau pembelian
-            $transaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->get();
+            $transaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $i)->get();
             $pengeluaranUpah = LaporanKaryawan::whereYear('updated_at', $now->year)->whereMonth('updated_at', $i)->get();
             $pengeluaranBeban = TransaksiBeban::whereYear('tanggal_pembayaran', $now->year)->whereMonth('tanggal_pembayaran', $i)->get();
             $jmlTransaksiBeliPerBulan[] = $transaksiBeli->sum(function ($row) {
@@ -68,7 +68,7 @@ class DashboardController extends Controller
             }) + $pengeluaranUpah->sum('total') + $pengeluaranBeban->sum('harga');
 
             //penjualan atau pendapatan
-            $transaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $i)->get();
+            $transaksiJual = TransaksiJual::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $i)->get();
             $jmlTransaksiJualPerBulan[] = $transaksiJual->sum(function ($row) {
                 return $row->harga * $row->qty;
             });
@@ -87,7 +87,7 @@ class DashboardController extends Controller
         $upahKaryawan = $upahKaryawan->sum('total');
 
         // pengeluaran
-        $pengeluaran = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->get();
+        $pengeluaran = TransaksiBeli::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->get();
         $pengeluaran = $pengeluaran->sum(function ($row) {
             return $row->harga * $row->qty;
         });
@@ -100,15 +100,15 @@ class DashboardController extends Controller
         $pengeluaran = number_format($pengeluaran + $upahKaryawan + $bebanUsaha, 0, ',', '.');
 
         // pendapatan
-        $pendapatan = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->get();
+        $pendapatan = TransaksiJual::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->get();
         $pendapatan = $pendapatan->sum(function ($row) {
             return $row->harga * $row->qty;
         });
         $pendapatan = number_format($pendapatan, 0, ',', '.');
 
         // jml transaksi
-        $jmlTransaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->groupBy('transaksi_beli_id')->get()->count();
-        $jmlTransaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->groupBy('transaksi_jual_id')->get()->count();
+        $jmlTransaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->groupBy('transaksi_beli_id')->get()->count();
+        $jmlTransaksiJual = TransaksiJual::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->groupBy('transaksi_jual_id')->get()->count();
 
         //jml karyawan
         $jmlKaryawan = Karyawan::where('status', 1)->get()->count();
@@ -121,7 +121,7 @@ class DashboardController extends Controller
             $jmlHari[] = $i;
 
             // pengeluaran atau pembelian
-            $transaksiBeli = TransaksiBeli::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->get();
+            $transaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->whereDay('tanggal_input', $i)->get();
             $pengeluaranUpah = LaporanKaryawan::whereYear('updated_at', $now->year)->whereMonth('updated_at', $now->month)->whereDay('updated_at', $i)->get();
             $pengeluaranBeban = TransaksiBeban::whereYear('tanggal_pembayaran', $now->year)->whereMonth('tanggal_pembayaran', $now->month)->whereDay('tanggal_pembayaran', $i)->get();
             $jmlTransaksiBeliPerHari[] = $transaksiBeli->sum(function ($row) {
@@ -129,7 +129,7 @@ class DashboardController extends Controller
             }) + $pengeluaranUpah->sum('total') + $pengeluaranBeban->sum('harga');
 
             //penjualan atau pendapatan
-            $transaksiJual = TransaksiJual::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->whereDay('created_at', $i)->get();
+            $transaksiJual = TransaksiJual::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->whereDay('tanggal_input', $i)->get();
             $jmlTransaksiJualPerHari[] = $transaksiJual->sum(function ($row) {
                 return $row->harga * $row->qty;
             });

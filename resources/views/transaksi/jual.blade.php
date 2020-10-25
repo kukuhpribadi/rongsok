@@ -16,6 +16,17 @@
           <div class="col">
             <form action="{{route('transaksiJualStore')}}" method="post">
               @csrf
+              <div class="row">
+                <div class="form-group col-3">
+                  <label for="datetimepicker4">Pilih Tanggal</label>
+                  <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                    <input type="text" name="tanggal_input" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
+                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <table class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -89,6 +100,12 @@
 @section('script')
 <script>
   $(document).ready(function() {
+    $('#datetimepicker4').datetimepicker({
+      format: 'L',
+      locale: 'id',
+      defaultDate: new Date(),
+    });
+
     // function add row
     const addRow = function() {
       let row = $('#rowTr');

@@ -38,13 +38,13 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
         $tanggalEnd = explode('/', $getTanggal[1]);
         $tanggalEnd = $tanggalEnd[2] . '-' . $tanggalEnd[1] . '-' . $tanggalEnd[0];
 
-        return TransaksiJual::whereBetween('created_at', [$tanggalStart, $tanggalEnd . " 23:59:59"])->get();
+        return TransaksiJual::whereBetween('tanggal_input', [$tanggalStart, $tanggalEnd])->get();
     }
 
     public function styles(Worksheet $sheet)
     {
         // last column as letter value (e.g., D)
-        $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]));
+        $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]) - 1);
 
         $last_row = count($this->collection()->toArray()) + 2;
 
@@ -69,9 +69,9 @@ class PenjualanExport implements FromCollection, WithMapping, WithHeadings, With
             AfterSheet::class => function (AfterSheet $event) {
 
                 // last column as letter value (e.g., D)
-                $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]));
+                $last_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]) - 1);
 
-                $total_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]) - 1);
+                $total_column = Coordinate::stringFromColumnIndex(count($this->collection()->toArray()[0]) - 2);
 
                 // calculate last row + 1 (total results + header rows + column headings row + new row)
                 $last_row = count($this->collection()->toArray()) + 2 + 3;

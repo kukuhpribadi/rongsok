@@ -21,6 +21,9 @@ class TransaksiBeli extends Model
 
     public function formatTanggal()
     {
-        return $this->created_at->format('d-m-Y');
+        $time = strtotime($this->tanggal_input);
+        $newformat = date('d-m-Y', $time);
+        return $newformat;
+        // return $this->created_at->format('d-m-Y');
     }
 }

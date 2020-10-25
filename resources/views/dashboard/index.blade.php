@@ -21,11 +21,11 @@
 
   <!-- Earnings (Monthly) Card Example -->
   <div class="col-xl col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
+    <div class="card border-left-danger shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Pengeluaran</div>
+            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Pengeluaran</div>
             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{$pengeluaran}}</div>
           </div>
           <div class="col-auto">
@@ -162,28 +162,28 @@
         label: 'Pengeluaran',
         data: <?= request()->routeIs('getDataTahunIni') ? json_encode($jmlTransaksiBeliPerBulan) : json_encode($jmlTransaksiBeliPerHari) ?>,
         lineTension: 0.3,
-        backgroundColor: "rgba(78, 115, 223, 0.2)",
-        borderColor: "rgba(78, 115, 223, 1)",
+        backgroundColor: "rgba(224, 110, 99, 0.2)",
+        borderColor: "rgba(224, 110, 99, 1)",
         pointRadius: 3,
-        pointBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointBorderColor: "rgba(78, 115, 223, 1)",
+        pointBackgroundColor: "rgba(224, 110, 99, 1)",
+        pointBorderColor: "rgba(224, 110, 99, 1)",
         pointHoverRadius: 3,
-        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+        pointHoverBackgroundColor: "rgba(224, 110, 99, 1)",
+        pointHoverBorderColor: "rgba(224, 110, 99, 1)",
         pointHitRadius: 10,
         pointBorderWidth: 2,
       }, {
         label: 'Pendapatan',
         data: <?= request()->routeIs('getDataTahunIni') ? json_encode($jmlTransaksiJualPerBulan) : json_encode($jmlTransaksiJualPerHari) ?>,
         lineTension: 0.3,
-        backgroundColor: "rgba(235, 64, 52, 0.2)",
-        borderColor: "rgba(235, 64, 52, 1)",
+        backgroundColor: "rgba(28, 200, 138, 0.2)",
+        borderColor: "rgba(28, 200, 138, 1)",
         pointRadius: 3,
-        pointBackgroundColor: "rgba(235, 64, 52, 1)",
-        pointBorderColor: "rgba(235, 64, 52, 1)",
+        pointBackgroundColor: "rgba(28, 200, 138, 1)",
+        pointBorderColor: "rgba(28, 200, 138, 1)",
         pointHoverRadius: 3,
-        pointHoverBackgroundColor: "rgba(235, 64, 52, 1)",
-        pointHoverBorderColor: "rgba(235, 64, 52, 1)",
+        pointHoverBackgroundColor: "rgba(28, 200, 138, 1)",
+        pointHoverBorderColor: "rgba(28, 200, 138, 1)",
         pointHitRadius: 10,
         pointBorderWidth: 2,
       }]
