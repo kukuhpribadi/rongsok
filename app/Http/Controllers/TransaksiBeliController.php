@@ -61,11 +61,18 @@ class TransaksiBeliController extends Controller
 
     public function dataTransaksiBeli()
     {
+        function formatTanggal($tanggal)
+        {
+            $tanggalEdit = explode('-', $tanggal);
+            $tanggalEdit = $tanggalEdit[2] . '/' . $tanggalEdit[1] . '/' . $tanggalEdit[0];
+            return $tanggalEdit;
+        }
+
         $pembelian = TransaksiBeli::query()->orderBy('created_at', 'desc');
         return DataTables::eloquent($pembelian)
             ->addIndexColumn()
             ->addColumn('aksi', function ($b) {
-                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-id="' . $b->id . '" data-transaksi_beli_id="' . $b->transaksi_beli_id . '" data-barang_id="' . $b->barang_id . '" data-harga="' . number_format($b->harga, 0, ',', '.') . '" data-qty="' . $b->qty . '" data-keterangan="' . $b->keterangan . '" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-id="' . $b->id . '" data-tanggal_input="' . formatTanggal($b->tanggal_input) . '" data-transaksi_beli_id="' . $b->transaksi_beli_id . '" data-barang_id="' . $b->barang_id . '" data-harga="' . number_format($b->harga, 0, ',', '.') . '" data-qty="' . $b->qty . '" data-keterangan="' . $b->keterangan . '" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
                 <a href="' . route("transaksiBeliDelete", $b->id) . '" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-idTransaksi="' . $b->transaksi_beli_id . '" data-nama="' . $b->barang->nama . '"><i class="far fa-trash-alt"></i></a>';
             })
             ->addColumn('total', function ($t) {
@@ -87,9 +94,27 @@ class TransaksiBeliController extends Controller
             ->make(true);
     }
 
+    // public function update(Request $request)
+    // {
+    //     $transaksi = TransaksiBeli::find($request->id);
+    //     $harga = str_replace('.', '', $request->harga);
+    //     $transaksi->update([
+    //         'transaksi_beli_id' => $request->transaksi_beli_id,
+    //         'barang_id' => $request->nama,
+    //         'harga' => $harga,
+    //         'qty' => $request->qty,
+    //         'keterangan' => $request->keterangan,
+    //     ]);
+    // }
+
     public function update(Request $request)
     {
         $transaksi = TransaksiBeli::find($request->id);
+
+        $tanggalInput = explode('/', $request->tanggal_input);
+        $tanggalInput = $tanggalInput[2] . '-' . $tanggalInput[1] . '-' . $tanggalInput[0];
+        // dd($tanggalInput);
+
         $harga = str_replace('.', '', $request->harga);
         $transaksi->update([
             'transaksi_beli_id' => $request->transaksi_beli_id,
@@ -98,6 +123,14 @@ class TransaksiBeliController extends Controller
             'qty' => $request->qty,
             'keterangan' => $request->keterangan,
         ]);
+
+        // update semua tanggal dengan id transaksi yang sama
+        $IDTransaksi = TransaksiBeli::where('transaksi_beli_id', $request->transaksi_beli_id)->get();
+        foreach ($IDTransaksi as $key => $value) {
+            $IDTransaksi[$key]->update([
+                'tanggal_input' => $tanggalInput,
+            ]);
+        }
     }
 
     public function delete($id)

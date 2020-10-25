@@ -55,9 +55,18 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="#" method="post" id="formEdit">
+        <form action="{{route('transaksiBeliUpdate')}}" method="post" id="formEdit">
           @csrf
           <input type="hidden" name="id" id="idEdit">
+          <div class="form-group">
+            <label for="datetimepicker4">Pilih Tanggal</label>
+            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+              <input type="text" name="tanggal_input" id="tanggal_inputEdit" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
+              <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
           <div class="form-group">
             <label>ID Transaksi</label>
             <input type="text" class="form-control" name="transaksi_beli_id" id="transaksiIdEdit" autocomplete="off" readonly>
@@ -66,7 +75,7 @@
             <label>Jenis barang</label>
             <select class="form-control select2 formTransaksiSelect" id="idSelect" name="nama">
               @foreach ($barang as $item)
-              <option value="{{$item->id}}">{{$item->nama}}</option>
+              <option value="{{$item->id}}" data-harga="{{$item->harga}}">{{$item->nama}}</option>
               @endforeach
             </select>
           </div>
@@ -135,9 +144,16 @@
       }]
     });
 
+    $('#datetimepicker4').datetimepicker({
+      format: 'L',
+      locale: 'id',
+      defaultDate: new Date(),
+    });
+
     // reset form saat modal close
     $('.modal').on('hidden.bs.modal', function() {
       $(this).find('form')[0].reset();
+      $(this).find('option:selected').removeAttr('selected');
     });
 
     // autoNumeric pada form harga
@@ -145,10 +161,21 @@
       mDec: '0'
     });
 
+    $('.modal').on('change', function(e) {
+      if (e.target.classList.contains('formTransaksiSelect')) {
+        $('#hargaEdit').autoNumeric('init', {
+          mDec: '0'
+        });
+        let harga = $(e.target).find(':selected').attr('data-harga');
+        $('#hargaEdit').autoNumeric('set', harga);
+      }
+    });
+
     // edit data transaksi
     $('#modalEdit').on('show.bs.modal', function(event) {
       let button = $(event.relatedTarget);
       let id = button.data('id');
+      let tanggalInput = button.data('tanggal_input');
       let transaksiId = button.data('transaksi_beli_id');
       let barang_id = button.data('barang_id');
       let harga = button.data('harga');
@@ -156,6 +183,7 @@
       let keterangan = button.data('keterangan');
       let modal = $(this);
       modal.find('.modal-body #idEdit').val(id);
+      modal.find('.modal-body #tanggal_inputEdit').val(tanggalInput);
       modal.find('.modal-body #transaksiIdEdit').val(transaksiId);
       modal.find('.modal-body #hargaEdit').val(harga);
       modal.find('.modal-body #qtyEdit').val(qty);
@@ -165,11 +193,14 @@
           $(data).attr('selected', 'selected');
         }
       });
+
       //select2
       $('.formTransaksiSelect').select2({
         placeholder: 'Pilih jenis barang',
         allowClear: true,
       });
+
+
     });
 
     // update data ajax
@@ -190,14 +221,6 @@
         },
         error: function(data) {
           let res = data.responseJSON;
-          // if ($.isEmptyObject(res) == false) {
-          //     $.each(res.errors, function(key, value) {
-          //         $('input[name ="'+ key +'"]')
-          //             .closest('.form-group')
-          //             .append('<span class="help-block text-danger">' + value + '</span>');
-          //         $('input[name ="'+ key +'"]').addClass('is-invalid');
-          //     })
-          // }
         }
       })
     });

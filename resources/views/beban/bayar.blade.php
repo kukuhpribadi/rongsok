@@ -93,7 +93,7 @@
     </div>
 </div>
 
-<!-- modal tambah -->
+<!-- modal edit -->
 <div class="modal fade" tabindex="-1" role="dialog" id="modalEdit">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -203,9 +203,7 @@
         $('.modal').on('hidden.bs.modal', function() {
             $(this).find('form')[0].reset();
             $(this).find('.formTransaksiSelect').trigger('change.select2');
-            $(this).find('.help-block').remove();
-            $(this).find('.is-invalid').removeClass('is-invalid');
-
+            $(this).find('option:selected').removeAttr('selected');
             // tanggal_pembayaran
             $('.datetimepicker-input').val(tanggal);
         });
@@ -275,7 +273,7 @@
             modal.find('.modal-body #keteranganEdit').val(keterangan);
             modal.find('.modal-body #idSelectEdit option').each((i, data) => {
                 if (data.value == dataBebanUsahaId) {
-                    $(data).attr('selected', 'selected');
+                    $(data).attr("selected", "selected");
                 }
             });
             //select2

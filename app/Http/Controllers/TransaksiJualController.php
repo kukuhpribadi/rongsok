@@ -61,11 +61,18 @@ class TransaksiJualController extends Controller
 
     public function dataTransaksiJual()
     {
+        function formatTanggal($tanggal)
+        {
+            $tanggalEdit = explode('-', $tanggal);
+            $tanggalEdit = $tanggalEdit[2] . '/' . $tanggalEdit[1] . '/' . $tanggalEdit[0];
+            return $tanggalEdit;
+        }
+
         $penjualan = TransaksiJual::query()->orderBy('created_at', 'desc');
         return DataTables::eloquent($penjualan)
             ->addIndexColumn()
             ->addColumn('aksi', function ($b) {
-                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-id="' . $b->id . '" data-transaksi_jual_id="' . $b->transaksi_jual_id . '" data-barang_id="' . $b->barang_id . '" data-harga="' . number_format($b->harga, 0, ',', '.') . '" data-qty="' . $b->qty . '" data-keterangan="' . $b->keterangan . '" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-id="' . $b->id . '" data-tanggal_input="' . formatTanggal($b->tanggal_input) . '" data-transaksi_jual_id="' . $b->transaksi_jual_id . '" data-barang_id="' . $b->barang_id . '" data-harga="' . number_format($b->harga, 0, ',', '.') . '" data-qty="' . $b->qty . '" data-keterangan="' . $b->keterangan . '" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
                 <a href="' . route("transaksiJualDelete", $b->id) . '" class="btn btn-sm btn-icon btn-danger" id="buttonDelete" data-idTransaksi="' . $b->transaksi_jual_id . '" data-nama="' . $b->barang->nama . '"><i class="far fa-trash-alt"></i></a>';
             })
             ->addColumn('total', function ($t) {
@@ -89,6 +96,10 @@ class TransaksiJualController extends Controller
     public function update(Request $request)
     {
         $transaksi = TransaksiJual::find($request->id);
+
+        $tanggalInput = explode('/', $request->tanggal_input);
+        $tanggalInput = $tanggalInput[2] . '-' . $tanggalInput[1] . '-' . $tanggalInput[0];
+
         $harga = str_replace('.', '', $request->harga);
         $transaksi->update([
             'transaksi_jual_id' => $request->transaksi_jual_id,
@@ -97,6 +108,14 @@ class TransaksiJualController extends Controller
             'qty' => $request->qty,
             'keterangan' => $request->keterangan,
         ]);
+
+        // update semua tanggal dengan id transaksi yang sama
+        $IDTransaksi = TransaksiJual::where('transaksi_jual_id', $request->transaksi_jual_id)->get();
+        foreach ($IDTransaksi as $key => $value) {
+            $IDTransaksi[$key]->update([
+                'tanggal_input' => $tanggalInput,
+            ]);
+        }
     }
 
     public function delete($id)
