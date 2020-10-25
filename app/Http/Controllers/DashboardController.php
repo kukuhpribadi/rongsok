@@ -43,7 +43,7 @@ class DashboardController extends Controller
         $pendapatan = number_format($pendapatan, 0, ',', '.');
 
         // jml transaksi
-        $jmlTransaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->groupBy('transaksi_beli_id')->get()->count();
+        $jmlTransaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->groupBy('barang_id')->get();
         $jmlTransaksiJual = TransaksiJual::whereYear('tanggal_input', $now->year)->groupBy('transaksi_jual_id')->get()->count();
 
         //jml karyawan
@@ -73,7 +73,6 @@ class DashboardController extends Controller
                 return $row->harga * $row->qty;
             });
         }
-
 
         return view('dashboard.index', compact('pengeluaran', 'pendapatan', 'jmlTransaksiBeli', 'jmlTransaksiJual', 'jmlKaryawan', 'namaButton', 'jmlBulan', 'jmlTransaksiBeliPerBulan', 'hargaBeli', 'jmlTransaksiJualPerBulan'));
     }
@@ -107,7 +106,8 @@ class DashboardController extends Controller
         $pendapatan = number_format($pendapatan, 0, ',', '.');
 
         // jml transaksi
-        $jmlTransaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->groupBy('transaksi_beli_id')->get()->count();
+        $jmlTransaksiBeli = TransaksiBeli::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->groupBy('barang_id')->get();
+
         $jmlTransaksiJual = TransaksiJual::whereYear('tanggal_input', $now->year)->whereMonth('tanggal_input', $now->month)->groupBy('transaksi_jual_id')->get()->count();
 
         //jml karyawan
