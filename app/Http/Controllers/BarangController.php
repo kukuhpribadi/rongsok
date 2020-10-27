@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Barang;
+use App\TransaksiBeli;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -60,5 +62,38 @@ class BarangController extends Controller
     public function delete($id)
     {
         Barang::find($id)->delete();
+    }
+
+    // STOK BARANG
+    public function stokBarang()
+    {
+        return view('barang.stokBarang');
+    }
+
+    public function dataStokBarang()
+    {
+        $barang = Barang::query();
+        return DataTables::eloquent($barang)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($b) {
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
+                <a href="#" class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
+            })
+            ->addColumn('masuk', function ($msk) {
+                $now = Carbon::now();
+
+                // hari ini
+                return $msk->transaksi_beli->where('tanggal_input', $now->format('Y-m-d'))->sum('qty');
+
+                // tahun ini
+                return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfYear()->format('Y-m-d'), $now->lastOfYear()->format('Y-m-d')])->sum('qty');
+                // bulan ini
+                return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfMonth()->format('Y-m-d'), $now->lastOfMonth()->format('Y-m-d')])->sum('qty');
+            })
+            ->addColumn('keluar', function ($barang) {
+                return 'tes';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 }

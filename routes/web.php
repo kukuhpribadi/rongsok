@@ -40,6 +40,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/barang/update', 'BarangController@update')->name('barangUpdate');
     Route::delete('/barang/delete/{id}', 'BarangController@delete')->name('barangDelete');
 
+    // stok barang
+    Route::get('/barang/stokbarang', 'BarangController@stokBarang')->name('stokBarang');
+    Route::get('/barang/datastokbarang', 'BarangController@dataStokBarang')->name('dataStokBarang');
+
+
     Route::get('/karyawan', 'KaryawanController@index')->name('karyawanIndex');
     Route::get('/karyawan/data', 'KaryawanController@dataKaryawan')->name('dataKaryawan');
     Route::post('/karyawan', 'KaryawanController@store')->name('karyawanStore');

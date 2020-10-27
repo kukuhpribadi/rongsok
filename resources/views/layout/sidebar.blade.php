@@ -49,6 +49,7 @@
         <a class="collapse-item {{ Route::is('barangIndex*') ? 'active' : ''}}" href="{{route('barangIndex')}}">Set harga barang</a>
         <a class="collapse-item {{ Route::is('indexTransaksiBeli*') ? 'active' : ''}}" href="{{route('indexTransaksiBeli')}}">Data Pembelian</a>
         <a class="collapse-item {{ Route::is('indexTransaksiJual*') ? 'active' : ''}}" href="{{route('indexTransaksiJual')}}">Data Penjualan</a>
+        <a class="collapse-item {{ Route::is('stokBarang*') ? 'active' : ''}}" href="{{route('stokBarang')}}">Stok Barang</a>
       </div>
     </div>
   </li>
