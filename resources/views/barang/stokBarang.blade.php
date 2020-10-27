@@ -12,10 +12,16 @@
                     Hari
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Hari</a>
-                    <a class="dropdown-item" href="#">Bulan</a>
-                    <a class="dropdown-item" href="#">Tahun</a>
+                    <a class="dropdown-item" href="#" data-periode="Hari">Hari</a>
+                    <a class="dropdown-item" href="#" data-periode="Bulan">Bulan</a>
+                    <a class="dropdown-item" href="#" data-periode="Tahun">Tahun</a>
                 </div>
+                <!-- <select name="filter_periode" id="filter_periode" class="form-control">
+                    <option value=""> Pilih Periode </option>
+                    <option value="hari">hari</option>
+                    <option value="bulan"> bulan </option>
+                    <option value="tahun"> tahun </option>
+                </select> -->
             </div>
             <!-- Card Body -->
             <div class="card-body">
@@ -45,11 +51,22 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let data = "Hari";
+        $('.dropdown-item').click(function(e) {
+            data = $(this).data('periode');
+            $('#dropdownMenuButton').text(data);
+        })
+
         // datatable
-        $('#dataTable').DataTable({
+        let table = $('#dataTable').DataTable({
             responsive: true,
             serverSide: false,
-            ajax: "{{route('dataStokBarang')}}",
+            ajax: {
+                "url": "{{route('dataStokBarang')}}",
+                "data": function(d) {
+                    d.filter_periode = data.toLowerCase();
+                }
+            },
             columns: [{
                 data: 'DT_RowIndex',
                 name: 'id'
@@ -69,6 +86,10 @@
                 data: 'aksi',
                 name: 'aksi'
             }]
+        });
+        //filter Berdasarkan periode
+        $('.dropdown-item').click(function(e) {
+            $('#dataTable').DataTable().ajax.reload();
         });
 
     });

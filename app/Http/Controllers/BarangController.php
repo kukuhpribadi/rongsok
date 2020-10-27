@@ -82,13 +82,15 @@ class BarangController extends Controller
             ->addColumn('masuk', function ($msk) {
                 $now = Carbon::now();
 
-                // hari ini
-                return $msk->transaksi_beli->where('tanggal_input', $now->format('Y-m-d'))->sum('qty');
-
+                if (request('filter_periode') === "hari") {
+                    // hari ini
+                    return $msk->transaksi_beli->where('tanggal_input', $now->format('Y-m-d'))->sum('qty');
+                } elseif (request('filter_periode') === "bulan") {
+                    // bulan ini
+                    return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfMonth()->format('Y-m-d'), $now->lastOfMonth()->format('Y-m-d')])->sum('qty');
+                }
                 // tahun ini
                 return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfYear()->format('Y-m-d'), $now->lastOfYear()->format('Y-m-d')])->sum('qty');
-                // bulan ini
-                return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfMonth()->format('Y-m-d'), $now->lastOfMonth()->format('Y-m-d')])->sum('qty');
             })
             ->addColumn('keluar', function ($barang) {
                 return 'tes';
