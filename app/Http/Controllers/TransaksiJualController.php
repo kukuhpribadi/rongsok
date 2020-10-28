@@ -48,6 +48,11 @@ class TransaksiJualController extends Controller
                 'qty' => $request->qty[$key],
                 'keterangan' => $request->keterangan[$key],
             ]);
+
+            $stok = Barang::find($request->nama[$key]);
+            $stok->update([
+                'stok' => $stok->stok - $request->qty[$key]
+            ]);
         }
 
         return redirect(route('transaksiJual'))->with('sukses', 'Transaksi berhasil!');

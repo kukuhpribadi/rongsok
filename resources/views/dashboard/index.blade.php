@@ -255,7 +255,7 @@
   $(document).ready(function() {
     $('#dataTable').DataTable({
       "dom": '<ftpr',
-      "pageLength": 5
+      "pageLength": 5,
     });
   })
 </script>
