@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     // stok barang
     Route::get('/barang/stokbarang', 'BarangController@stokBarang')->name('stokBarang');
     Route::get('/barang/datastokbarang', 'BarangController@dataStokBarang')->name('dataStokBarang');
+    Route::post('/barang/stokbarang/update', 'BarangController@stokBarangUpdate')->name('stokBarangUpdate');
 
 
     Route::get('/karyawan', 'KaryawanController@index')->name('karyawanIndex');

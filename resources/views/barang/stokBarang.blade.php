@@ -46,6 +46,37 @@
     </div>
 </div>
 
+<!-- modal edit -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalEdit">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Stok Barang</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="#" method="post" id="formEdit">
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" name="id" id="idEdit">
+                    <div class="form-group">
+                        <label>Jenis barang</label>
+                        <input type="text" class="form-control" name="nama" id="namaEdit" autocomplete="off" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Stok barang</label>
+                        <input type="text" class="form-control" name="stok" id="stokEdit" autocomplete="off">
+                    </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="buttonUpdate">Update data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
@@ -92,6 +123,40 @@
             $('#dataTable').DataTable().ajax.reload();
         });
 
+
+        // edit modal
+        $('#modalEdit').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget)
+            let id = button.data('id');
+            let nama = button.data('nama');
+            let stok = button.data('stok');
+            let modal = $(this);
+            modal.find('.modal-body #idEdit').val(id);
+            modal.find('.modal-body #namaEdit').val(nama);
+            modal.find('.modal-body #stokEdit').val(stok);
+        });
+
+        // update data ajax
+        $('#buttonUpdate').click(function(e) {
+            e.preventDefault();
+            let form = $('#formEdit');
+            let data = form.serialize();
+
+            $.ajax({
+                url: "{{route('stokBarangUpdate')}}",
+                method: 'post',
+                data: data,
+                success: function(res) {
+                    form.trigger('reset');
+                    $('#modalEdit').modal('hide');
+                    $('#dataTable').DataTable().ajax.reload();
+                    Swal.fire('Sukses!', 'Data barang berhasil diubah', 'success');
+                },
+                error: function(data) {
+                    let res = data.responseJSON;
+                }
+            })
+        });
     });
 </script>
 

@@ -76,8 +76,7 @@ class BarangController extends Controller
         return DataTables::eloquent($barang)
             ->addIndexColumn()
             ->addColumn('aksi', function ($b) {
-                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>
-                <a href="#" class="btn btn-sm btn-icon btn-danger" id="buttonDelete"><i class="far fa-trash-alt"></i></a>';
+                return '<a href="#" class="btn btn-sm btn-icon btn-primary" data-id="' . $b->id . '" data-nama="' . $b->nama . '" data-stok="' . $b->stok . '" data-toggle="modal" data-target="#modalEdit"><i class="far fa-edit"></i></a>';
             })
             ->addColumn('masuk', function ($msk) {
                 $now = Carbon::now();
@@ -107,5 +106,15 @@ class BarangController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
+    }
+
+    public function stokBarangUpdate(Request $request)
+    {
+        $barang = Barang::find($request->id);
+
+        $barang->update([
+            'nama' => $request->nama,
+            'stok' => $request->stok
+        ]);
     }
 }
