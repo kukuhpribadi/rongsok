@@ -114,7 +114,7 @@
     <div id="collapseFour" class="collapse {{ Request::is('tool*')  ? 'show' : ''}}" aria-labelledby="headingFour" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <a class="collapse-item {{ request()->routeIs('exportIndex') ? 'active' : ''}}" href="{{ route('exportIndex')}}">Export Laporan</a>
-        <a class="collapse-item {{ request()->routeIs('backup') ? 'active' : ''}}" href="{{ route('backup')}}">Backup database</a>
+        <!-- <a class="collapse-item {{ request()->routeIs('backup') ? 'active' : ''}}" href="{{ route('backup')}}">Backup database</a> -->
       </div>
     </div>
   </li>

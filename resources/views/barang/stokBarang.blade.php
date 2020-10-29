@@ -7,7 +7,7 @@
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Stok Barang</h6>
+                <h6 class="m-0 font-weight-bold text-primary" id="judulH6">Stok Barang</h6>
                 <span>
                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Hari
@@ -150,7 +150,9 @@
         $('.dropdown-item').click(function(e) {
             data = $(this).data('periode');
             $('#dropdownMenuButton').text(data);
+            $('#judulH6').text(`Stok barang ${data} ini`);
         })
+        $('#judulH6').text(`Stok barang ${data} ini`);
 
         // datatable
         let table = $('#dataTable').DataTable({
@@ -190,12 +192,13 @@
         $('#buttonSimpan').click(function(e) {
             e.preventDefault();
             let form = $('#formTambah');
-            data = form.serializeArray();
-            tanggalStart = data[0].value.split("/");
+            datas = form.serializeArray();
+            tanggalStart = datas[0].value.split("/");
             tanggalStart = `${tanggalStart[2]}-${tanggalStart[1]}-${tanggalStart[0]}`;
-            tanggalEnd = data[1].value.split("/");
+            tanggalEnd = datas[1].value.split("/");
             tanggalEnd = `${tanggalEnd[2]}-${tanggalEnd[1]}-${tanggalEnd[0]}`;
             data = `${tanggalStart}/${tanggalEnd}`;
+            $('#judulH6').text(`Stok barang ${datas[0].value}-${datas[1].value}`);
             $.ajax({
                 url: "{{route('dataStokBarang')}}",
                 method: 'get',
