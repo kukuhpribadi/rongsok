@@ -70,7 +70,7 @@ class BarangController extends Controller
         return view('barang.stokBarang');
     }
 
-    public function dataStokBarang()
+    public function dataStokBarang(Request $request)
     {
         $barang = Barang::query();
         return DataTables::eloquent($barang)
@@ -80,29 +80,36 @@ class BarangController extends Controller
             })
             ->addColumn('masuk', function ($msk) {
                 $now = Carbon::now();
-
+                // return url()->full();
                 if (request('filter_periode') === "hari") {
-                    // hari ini
                     return $msk->transaksi_beli->where('tanggal_input', $now->format('Y-m-d'))->sum('qty');
                 } elseif (request('filter_periode') === "bulan") {
-                    // bulan ini
                     return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfMonth()->format('Y-m-d'), $now->lastOfMonth()->format('Y-m-d')])->sum('qty');
+                } elseif (request('filter_periode') === "tahun") {
+                    return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfYear()->format('Y-m-d'), $now->lastOfYear()->format('Y-m-d')])->sum('qty');
                 }
-                // tahun ini
-                return $msk->transaksi_beli->whereBetween('tanggal_input', [$now->firstOfYear()->format('Y-m-d'), $now->lastOfYear()->format('Y-m-d')])->sum('qty');
+
+                $tanggal = explode('/', request('filter_periode'));
+                return $msk->transaksi_beli->whereBetween('tanggal_input', [$tanggal[0], $tanggal[1]])->sum('qty');
             })
             ->addColumn('keluar', function ($klr) {
                 $now = Carbon::now();
 
                 if (request('filter_periode') === "hari") {
-                    // hari ini
                     return $klr->transaksi_jual->where('tanggal_input', $now->format('Y-m-d'))->sum('qty');
                 } elseif (request('filter_periode') === "bulan") {
-                    // bulan ini
                     return $klr->transaksi_jual->whereBetween('tanggal_input', [$now->firstOfMonth()->format('Y-m-d'), $now->lastOfMonth()->format('Y-m-d')])->sum('qty');
+                } elseif (request('filter_periode') === "tahun") {
+                    return $klr->transaksi_jual->whereBetween('tanggal_input', [$now->firstOfYear()->format('Y-m-d'), $now->lastOfYear()->format('Y-m-d')])->sum('qty');
                 }
-                // tahun ini
-                return $klr->transaksi_jual->whereBetween('tanggal_input', [$now->firstOfYear()->format('Y-m-d'), $now->lastOfYear()->format('Y-m-d')])->sum('qty');
+                $tanggal = explode('/', request('filter_periode'));
+                return $klr->transaksi_jual->whereBetween('tanggal_input', [$tanggal[0], $tanggal[1]])->sum('qty');
+            })
+            ->editColumn('stok', function ($st) {
+                if ($st->stok == null) {
+                    return 0;
+                }
+                return $st->stok;
             })
             ->rawColumns(['aksi'])
             ->make(true);

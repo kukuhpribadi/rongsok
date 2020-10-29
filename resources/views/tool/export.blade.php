@@ -118,7 +118,7 @@
 
         //select2
         $('.formTransaksiSelect').select2({
-            placeholder: 'Pilih beban',
+            placeholder: 'Pilih jenis laporan',
             allowClear: true,
         });
 
