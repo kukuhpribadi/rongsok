@@ -40,11 +40,11 @@
   </li>
 
   <li class="nav-item">
-    <a class="nav-link {{ Route::is(['barangIndex', 'indexTransaksiBeli', 'indexTransaksiJual'])  ? '' : 'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+    <a class="nav-link {{ Route::is(['barangIndex', 'indexTransaksiBeli', 'indexTransaksiJual','stokBarang'])  ? '' : 'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
       <i class="fas fa-fw fa-cog"></i>
       <span>Data & Set transaksi</span>
     </a>
-    <div id="collapseOne" class="collapse {{ Route::is(['barangIndex', 'indexTransaksiBeli', 'indexTransaksiJual'])  ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+    <div id="collapseOne" class="collapse {{ Route::is(['barangIndex', 'indexTransaksiBeli', 'indexTransaksiJual','stokBarang'])  ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <a class="collapse-item {{ Route::is('barangIndex*') ? 'active' : ''}}" href="{{route('barangIndex')}}">Set harga barang</a>
         <a class="collapse-item {{ Route::is('indexTransaksiBeli*') ? 'active' : ''}}" href="{{route('indexTransaksiBeli')}}">Data Pembelian</a>
