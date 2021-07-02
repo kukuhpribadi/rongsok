@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
 			$table->bigInteger('id', true)->unsigned();
 			$table->string('username');
 			$table->string('password');
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

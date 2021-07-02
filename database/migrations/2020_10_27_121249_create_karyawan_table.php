@@ -23,7 +23,7 @@ class CreateKaryawanTable extends Migration
 			$table->integer('role')->nullable();
 			$table->integer('status');
 			$table->integer('upah')->nullable();
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

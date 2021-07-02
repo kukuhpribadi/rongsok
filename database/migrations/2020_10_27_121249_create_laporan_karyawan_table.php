@@ -19,7 +19,7 @@ class CreateLaporanKaryawanTable extends Migration
 			$table->string('range');
 			$table->integer('status')->nullable();
 			$table->integer('total')->nullable();
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

@@ -21,7 +21,7 @@ class CreateAbsensiTable extends Migration
 			$table->integer('absensi');
 			$table->string('keterangan')->nullable();
 			$table->integer('upah');
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

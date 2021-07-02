@@ -18,7 +18,7 @@ class CreateExportLaporanTable extends Migration
 			$table->bigInteger('id', true)->unsigned();
 			$table->string('range');
 			$table->string('jenis_laporan');
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

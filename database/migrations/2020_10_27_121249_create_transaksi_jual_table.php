@@ -22,7 +22,7 @@ class CreateTransaksiJualTable extends Migration
 			$table->integer('harga');
 			$table->float('qty', 10, 0)->default(0);
 			$table->string('keterangan')->nullable();
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

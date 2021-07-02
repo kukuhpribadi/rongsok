@@ -21,7 +21,7 @@ class CreateTransaksiBebanTable extends Migration
 			$table->string('no_nota')->nullable();
 			$table->date('tanggal_pembayaran')->nullable();
 			$table->text('keterangan')->nullable();
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 

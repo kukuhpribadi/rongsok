@@ -19,7 +19,7 @@ class CreateBebanUsahaTable extends Migration
 			$table->string('jenis_beban');
 			$table->integer('harga');
 			$table->string('keterangan')->nullable();
-			$table->timestamps(10);
+			$table->timestamps();
 		});
 	}
 
